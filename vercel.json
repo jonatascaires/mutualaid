@@ -1,9 +1,17 @@
 {
+  "version": 2,
+  "build": {
+    "env": {
+      "NODE_VERSION": "20"
+    }
+  },
   "builds": [
     {
       "src": "nuxt.config.js",
       "use": "@nuxtjs/vercel-builder",
-      "config": {}
+      "config": {
+        "serverFiles": ["package.json"]
+      }
     }
   ]
 }
