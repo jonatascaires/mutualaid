@@ -1,0 +1,1281 @@
+<template>
+  <div class="w-full">
+    <!-- Hero section -->
+    <section id="hero" class="w-full pb-24">
+      <BaseSection>
+        <div class="col-span-12 lg:col-span-6 mt-12 xl:mt-10 space-y-4 sm:space-y-6 px-6 text-center sm:text-left">
+          <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">Bem-vindo ao
+            RendaPassivaGlobal</span>
+          <h1 data-aos="fade-right"
+            class="text-[2.5rem] sm:text-5xl xl:text-6xl font-bold leading-tight capitalize sm:pr-8 xl:pr-10">
+            Unindo Pessoas em uma <span class="text-header-gradient">Comunidade de Renda Passiva</span>
+          </h1>
+          <p data-aos="fade-down" data-aos-delay="300" class="paragraph hidden sm:block">
+            Bem-vindo ao nosso inovador sistema de renda passiva, onde os participantes podem ganhar recompensas
+            financeiras
+            realizando tarefas de forma transparente e sustentável. Gerenciado por um contrato inteligente na
+            blockchain,
+            garantimos segurança, transparência e imutabilidade das operações.
+          </p>
+          <div data-aos="fade-up" data-aos-delay="500"
+            class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-2">
+            <BaseButton
+              class="max-w-full px-8 py-4 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] border border-[#0c66ee] text-white"
+              @click="$scrollTo('#purchase-emblem')">
+              Começar Agora
+            </BaseButton>
+            <!-- <BaseButton
+              class="max-w-full px-6 py-4 bg-inherit text-gradient border border-[#0c66ee] flex items-center justify-center"
+              @click="$scrollTo('#about')">
+              <span>Saiba Mais</span>
+              <ChevronDownIcon :size="20" class="mt-1 text-[#0c66ee]" />
+            </BaseButton> -->
+          </div>
+        </div>
+
+        <div class="hidden sm:block col-span-12 lg:col-span-6">
+          <div class="w-full">
+            <img data-aos="fade-up" :src="require('~/assets/img/hero-image.webp')" class="-mt-4"
+              alt="Comunidade de Renda Passiva" />
+          </div>
+        </div>
+        <!-- Imagens decorativas omitidas para brevidade -->
+      </BaseSection>
+    </section>
+
+    <!-- Fila de Ajuda Mútua section -->
+    <section id="help-queue"
+      class="max-w-screen-xl mt-10 mx-2 sm:mx-auto px-4 sm:px-6 lg:px-8 py-12 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg transform lg:-translate-y-12 relative">
+      <div v-if="isUpdating" class="text-center my-6">
+        <div class="spinner"></div>
+        <p class="text-gray-600">Atualizando...</p>
+      </div>
+      <div class="w-full text-center mb-12">
+        <h2 class="text-4xl font-semibold text-gray-800">📜 Fila de Renda Passiva</h2>
+        <p class="text-gray-600 mt-4 text-lg">Visualize as próximas oportunidades de ganho no sistema.</p>
+      </div>
+
+      <!-- Cards com contagem regressiva e detalhes -->
+      <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
+        <div v-if="queue.length === 0" class="col-span-1 sm:col-span-2 lg:col-span-3 text-center">
+          <p class="text-gray-600 text-lg font-semibold">A fila está vazia no momento. 🚀</p>
+          <p class="text-gray-500">Volte mais tarde para verificar novas oportunidades de ganho.</p>
+        </div>
+        <div v-else v-for="(request, index) in queue" :key="index"
+          class="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" data-aos="fade-up"
+          :data-aos-delay="100 * index">
+          <div class="flex items-center space-x-4 mb-4">
+            <div class="text-2xl font-bold text-blue-600">#{{ index + 1 }}</div>
+            <div class="flex-1">
+              <h3 class="text-xl font-semibold text-gray-800">Usuário: {{ compactAddress(request.user) }}</h3>
+            </div>
+            <div>
+              <span class="px-2 py-1 text-sm font-semibold rounded-full" :class="{
+                'bg-green-100 text-green-600': request.status === 'Pending',
+                'bg-yellow-100 text-yellow-600': request.status === 'Expired',
+                'bg-gray-100 text-gray-600': request.status === 'Completed',
+              }">
+                {{ request.status }}
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center">
+              <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
+              <p class="text-gray-700">
+                Ganho Total: <span class="font-semibold text-green-500">{{ request.totalAidAmount }} USDT</span>
+              </p>
+            </div>
+            <div class="flex items-center">
+              <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
+              <p class="text-gray-700">
+                Recebido: <span class="font-semibold text-blue-500">{{ request.receivedAmount }} USDT</span>
+              </p>
+            </div>
+            <div class="flex items-center">
+              <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
+              <p class="text-gray-700">
+                Restante: <span class="font-semibold text-red-500">{{ request.remainingAid }} USDT</span>
+              </p>
+            </div>
+            <div class="flex items-center">
+              <ClockIcon class="w-5 h-5 text-blue-600 mr-2" />
+              <p class="text-gray-700">
+                Tempo Restante: {{ formatTime(request.timeRemaining) }}
+              </p>
+            </div>
+            <!-- Barra de progresso -->
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-blue-600 h-2.5 rounded-full" :style="{ width: request.progress + '%' }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginação no Rodapé -->
+      <div class="w-full flex justify-center mt-12">
+        <button
+          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
+          1
+        </button>
+        <button
+          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
+          2
+        </button>
+        <button
+          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
+          3
+        </button>
+      </div>
+    </section>
+
+    <!-- Seção de Compra de Emblema -->
+    <section id="purchase-emblem" class="w-full my-24">
+      <BaseSection>
+        <LandingBuyTradeImage class="sm:hidden mb-8" />
+        <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">Adquira seu Emblema e Comece a Ganhar</h2>
+          <p class="paragraph">
+            Para ingressar na comunidade, adquira um emblema que representa seu nível de compromisso. Escolha o
+            nível que melhor se adapta a você e comece a gerar renda passiva realizando tarefas.
+          </p>
+
+          <div class="space-y-6 lg:pr-12">
+            <!-- Campo de seleção de nível do emblema -->
+            <div>
+              <label for="level" class="block text-gray-700 font-semibold mb-2">Selecione o Nível do Emblema (1 a
+                50)</label>
+              <input id="level" v-model.number="selectedLevel" type="number" min="1" max="50"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Digite um nível de 1 a 50" />
+            </div>
+
+            <!-- Exibição do valor em USDT -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Valor do Emblema (USDT)</label>
+              <p class="text-xl font-bold text-gray-800">{{ emblemCostInUSDT }} USDT</p>
+            </div>
+
+            <!-- Informações adicionais, exibidas apenas após a primeira interação -->
+            <div v-if="showDetails" class="bg-gray-100 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold text-gray-700 mb-2">Detalhes do Emblema</h3>
+
+              <!-- Custo e frequência do compromisso -->
+              <p class="text-gray-600">
+                <span class="font-semibold text-blue-600">Tarefas Requeridas:</span> {{ commitmentCost }} USDT a
+                cada {{ commitmentPeriodDays }} dias
+              </p>
+
+              <!-- Custo e frequência da renovação -->
+              <p class="text-gray-600 mt-2">
+                <span class="font-semibold text-purple-600">Renovação do Emblema:</span> {{ renewalCost }} USDT a cada
+                {{ renewalPeriodDays }} dias
+              </p>
+
+              <!-- Recompensa estimada -->
+              <p class="text-gray-600 mt-2">
+                <span class="font-semibold text-green-600">Renda Estimada:</span> {{ estimatedReward }} USDT
+                disponível a cada {{ aidRequestPeriodDays }} dias
+              </p>
+            </div>
+
+            <!-- Botão de compra que muda para "Confirmar" após o clique -->
+            <BaseButton class="w-full px-5 py-4 bg-blue-gradient text-white text-base font-medium mt-6"
+              :disabled="isPurchasing" @click="handlePurchase">
+              <span v-if="!isPurchasing">{{ buttonLabel }}</span>
+              <span v-else>Processando...</span>
+            </BaseButton>
+
+            <!-- Mensagem de sucesso ou erro -->
+            <div v-if="purchaseStatus" :class="{
+              'text-green-600': purchaseStatus === 'success',
+              'text-red-600': purchaseStatus === 'error',
+            }" class="mt-4 text-center">
+              {{ purchaseMessage }}
+            </div>
+          </div>
+        </div>
+        <LandingBuyTradeImage data-aos="fade-left" class="hidden sm:block" />
+      </BaseSection>
+    </section>
+
+    <!-- Seção de Link de Convite -->
+    <section id="invite-link" class="w-full my-24">
+      <BaseSection>
+        <div class="col-span-12 mt-4 xl:mt-20 space-y-6 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+            Compartilhe seu <span class="text-header-gradient">Link de Convite</span>
+          </h2>
+          <p class="paragraph">
+            Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe
+            bônus ao trazer novos membros!
+          </p>
+          <div v-if="userAddress" class="flex items-center space-x-4">
+            <input type="text" :value="inviteLink" readonly
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <BaseButton class="px-4 py-2 bg-blue-500 text-white rounded-lg" @click="copyInviteLink">
+              Copiar
+            </BaseButton>
+          </div>
+          <div v-else class="text-gray-600">Por favor, conecte sua carteira para gerar seu link de convite.</div>
+        </div>
+      </BaseSection>
+    </section>
+
+    <!-- Sessão da Calculadora -->
+    <section id="investment-calculator" class="w-full my-24">
+      <BaseSection>
+        <div class="col-span-12 lg:col-span-6 space-y-6 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+            Simule Seus <span class="text-header-gradient">Ganhos</span>
+          </h2>
+          <p class="paragraph">
+            Selecione o nível do seu emblema e descubra quanto você pode ganhar ao longo de 1 ano.
+          </p>
+
+          <!-- Campo de seleção de nível do emblema -->
+          <div>
+            <label for="level" class="block text-gray-700 font-semibold mb-2">Selecione o Nível do Emblema (1 a
+              50)</label>
+            <input id="level" v-model.number="selectedLevelCalculator" type="number" min="1" max="50"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Digite um nível de 1 a 50" />
+          </div>
+
+          <!-- Botão para calcular -->
+          <BaseButton class="w-full px-6 py-4 bg-blue-gradient text-white text-base font-medium mt-4"
+            @click="calculateSimulation">
+            Calcular
+          </BaseButton>
+        </div>
+      </BaseSection>
+    </section>
+
+    <!-- Modal de Resultados da Calculadora -->
+    <div v-if="showModalCalculator" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
+        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+          <h2 class="text-lg font-semibold">Resultados da Simulação</h2>
+          <button @click="showModalCalculator = false" class="text-white hover:text-gray-300">
+            ✕
+          </button>
+        </div>
+        <div class="p-6 overflow-auto max-h-[70vh]">
+          <table class="w-full text-left border-collapse border border-gray-300">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-2 border border-gray-300">Dia</th>
+                <th class="px-4 py-2 border border-gray-300">Descrição</th>
+                <th class="px-4 py-2 border border-gray-300">Transferência (USDT)</th>
+                <th class="px-4 py-2 border border-gray-300">Saldo (USDT)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in calculatedData" :key="index"
+                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+                <td class="px-4 py-2 border border-gray-300">{{ row.day }}</td>
+                <td class="px-4 py-2 border border-gray-300">{{ row.description }}</td>
+                <td class="px-4 py-2 border border-gray-300 text-right"
+                  :class="row.amount > 0 ? 'text-green-600' : 'text-red-600'">
+                  {{ row.amount > 0 ? '+' : '' }}{{ row.amount.toFixed(2) }} USDT
+                </td>
+                <td class="px-4 py-2 border border-gray-300 text-right">{{ row.balance.toFixed(2) }} USDT</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parceria com o Token Invistech -->
+    <section id="token-partnership" class="w-full my-24">
+      <BaseSection>
+        <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+            Parceria Estratégica com o <span class="text-header-gradient">Token Invistech</span>
+          </h2>
+          <p class="paragraph">
+            Estabelecemos uma parceria estratégica com o projeto Invistech, um token de alta liquidez, para garantir a
+            sustentabilidade e eficiência do nosso sistema de renda passiva.
+          </p>
+          <ul class="space-y-4 sm:space-y-2">
+            <LandingListItem title="Receba seus ganhos em Tokens Invistech em até 24 horas" />
+            <LandingListItem title="Sistema Eficiente e Otimizado para Máximos Resultados" />
+            <LandingListItem title="Conversão Fácil para USDT ou Outras Criptomoedas" />
+          </ul>
+        </div>
+        <div data-aos="fade-left" class="col-span-12 lg:col-span-6">
+          <div class="w-full">
+            <img :src="require('~/assets/img/hero-image.webp')" class="w-full" alt="Parceria com o Token Invistech" />
+          </div>
+        </div>
+      </BaseSection>
+    </section>
+
+    <!-- Nova Seção: Bônus de Indicação -->
+    <section id="referral-bonus" class="w-full my-24">
+      <BaseSection>
+        <div data-aos="fade-right" class="col-span-12 lg:col-span-6">
+          <div class="w-full">
+            <img :src="require('~/assets/img/hero-image.webp')" class="w-full" alt="Bônus de Indicação" />
+          </div>
+        </div>
+        <div data-aos="fade-left" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+            Impulsione o Crescimento com Nosso <span class="text-header-gradient">Bônus de Indicação</span>
+          </h2>
+          <p class="paragraph">
+            Convide amigos para se juntar à nossa comunidade e ganhe um bônus de 5% sobre todas as compras de emblemas,
+            tarefas e renovações que eles realizarem. É uma maneira simples de aumentar seus ganhos enquanto fortalece a
+            comunidade.
+          </p>
+          <ul class="space-y-4 sm:space-y-2">
+            <LandingListItem title="Receba 5% de Bônus por Cada Indicação" />
+            <LandingListItem title="Bônus Aplicado em Compras, Tarefas e Renovações dos Indicados" />
+            <LandingListItem title="Amplie Seus Ganhos e Ajude a Comunidade a Crescer" />
+          </ul>
+        </div>
+      </BaseSection>
+    </section>
+
+    <!-- Estatísticas da Comunidade -->
+    <section id="community-stats"
+      class="max-w-screen-xl mx-4 sm:mx-auto px-6 sm:px-8 lg:px-10 py-16 bg-gradient-to-b from-[#f9fcff] to-[#e6f7ff] rounded-lg shadow-lg">
+      <div v-if="isUpdating" class="text-center my-6">
+        <div class="spinner"></div>
+        <p class="text-gray-600">Atualizando...</p>
+      </div>
+      <div class="w-full text-center mb-12">
+        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-800">📊 Estatísticas da Comunidade</h2>
+        <p data-aos="fade-up" data-aos-delay="200" class="text-gray-600 mt-4 text-lg">
+          Acompanhe o desempenho e as interações da comunidade dentro da rede MutualAid.
+        </p>
+      </div>
+
+      <div v-if="loadingStats" class="text-center my-6">
+        <div class="spinner"></div>
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-center">
+        <div v-for="(stat, index) in stats" :key="index"
+          class="flex flex-col items-center space-y-4 p-6 bg-white rounded-xl shadow-md">
+          <div class="text-5xl font-bold text-blue-600">{{ stat.value }}</div>
+          <div class="text-lg font-medium text-gray-700">{{ stat.label }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Segurança e Transparência section -->
+    <section id="security" class="w-full my-36">
+      <BaseSection data-aos="fade-down">
+        <div class="col-span-12 lg:col-span-7">
+          <div class="w-full">
+            <img :src="require('~/assets/img/hero-image.webp')" class="w-[95%]" alt="Segurança e Transparência" />
+          </div>
+        </div>
+        <div class="col-span-12 lg:col-span-5 space-y-6 px-4 sm:px-6 mt-20">
+          <h2 class="text-4xl font-semibold">
+            Transparência e <span class="text-header-gradient">Segurança</span> em Primeiro Lugar
+          </h2>
+          <p class="paragraph">
+            Todas as operações são gerenciadas por um contrato inteligente na blockchain, garantindo segurança,
+            transparência e imutabilidade das regras do sistema. O uso de USDT protege os participantes da volatilidade
+            do mercado cripto.
+          </p>
+          <ul class="space-y-4 sm:space-y-2">
+            <LandingListItem title="Transparência e Imutabilidade na Blockchain" />
+            <LandingListItem title="Segurança Financeira com USDT" />
+            <LandingListItem title="Auditoria Independente do Contrato" />
+          </ul>
+          <BaseButton
+            class="w-full sm:max-w-[240px] px-10 py-4 bg-inherit text-gradient border border-[#0c66ee] text-base"
+            @click="$scrollTo('#faq')">Saiba Mais</BaseButton>
+        </div>
+      </BaseSection>
+    </section>
+
+    <div class="w-full relative">
+      <!-- Botão Flutuante -->
+      <button
+        class="fixed bottom-6 right-6 z-50 bg-blue-500 text-white px-5 py-3 rounded-full shadow-lg hover:bg-blue-600 transition"
+        @click="showModal = true">
+        Meus Emblemas
+      </button>
+
+      <!-- Modal de Tela Cheia -->
+      <div v-if="showModal" class="fixed inset-0 z-40 bg-white overflow-y-auto transition-opacity"
+        @click.self="showModal = false">
+        <!-- Modal Header -->
+        <div class="sticky top-0 bg-blue-500 text-white p-4 flex justify-between items-center">
+          <h2 class="text-xl font-bold">Meus Emblemas</h2>
+          <button class="text-white hover:text-gray-200 focus:outline-none" @click="showModal = false">
+            ✕
+          </button>
+        </div>
+
+        <!-- Emblemas do Usuário -->
+        <div class="p-6 space-y-6">
+          <!-- Verifica se o usuário tem emblemas -->
+          <div v-if="userEmblems.length === 0" class="text-center py-8">
+            <h3 class="text-2xl font-semibold text-white mb-4">Você ainda não possui emblemas.</h3>
+            <p class="text-white">Adquira seu primeiro emblema e comece a participar da comunidade de ajuda mútua.</p>
+            <BaseButton
+              class="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              @click="closeModalAndScroll">
+              Adquirir Emblema
+            </BaseButton>
+          </div>
+
+          <!-- Exibe os emblemas caso existam -->
+          <div v-else>
+            <BaseSection>
+              <div v-for="(emblem, index) in userEmblems" :key="emblem.id"
+                class="col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center transform hover:scale-105 mt-4"
+                data-aos="fade-up" :data-aos-delay="100 * index">
+                <div class="flex flex-col items-center mb-4">
+                  <h3 class="text-2xl font-semibold text-gray-800 mb-2">Emblema Nível {{ emblem.level }}</h3>
+                  <span class="px-3 py-1 text-sm font-semibold rounded-full" :class="{
+                    'bg-green-100 text-green-600': emblem.active,
+                    'bg-red-100 text-red-600': !emblem.active,
+                  }">
+                    {{ emblem.active ? 'Ativo' : 'Expirado' }}
+                  </span>
+                </div>
+                <div class="text-gray-600 mb-4">
+                  <p><strong>Data de Aquisição:</strong> {{ formatDate(emblem.purchaseTime) }}</p>
+                  <p><strong>Data de Expiração:</strong> {{ formatDate(emblem.expiryTime) }}</p>
+                  <p><strong>Ganho Total:</strong> {{ formatTotalEarned(emblem.totalEarned) }} USDT</p>
+                </div>
+
+                <!-- Contador e barra de progresso para compromisso -->
+                <div class="mb-2">
+                  <p class="text-gray-700">Compromisso: {{ formatTimeRemaining(emblem, 'commitment') }}</p>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-blue-500 h-2.5 rounded-full" :style="{ width: emblem.commitmentProgress + '%' }">
+                    </div>
+                  </div>
+                </div>
+                <BaseButton
+                  class="w-full px-4 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'commitment') || isProcessing }"
+                  :disabled="!isActionEnabled(emblem, 'commitment') || isProcessing" @click="makeCommitment(emblem.id)">
+                  <span v-if="!isProcessing">Fazer Compromisso ({{ formatCommitmentCost(emblem.level) }} USDT)</span>
+                  <span v-else>Processando...</span>
+                </BaseButton>
+
+                <!-- Contador e barra de progresso para solicitação de ajuda -->
+                <div class="mb-2 mt-4">
+                  <p class="text-gray-700">Solicitação de Ajuda: {{ formatTimeRemaining(emblem, 'aid') }}</p>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: emblem.aidProgress + '%' }"></div>
+                  </div>
+                </div>
+                <BaseButton
+                  class="w-full px-4 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'aid') || isProcessing }"
+                  :disabled="!isActionEnabled(emblem, 'aid') || isProcessing" @click="requestAid(emblem.id)">
+                  <span v-if="!isProcessing">Pedir Ajuda (Estimativa: {{ formatAidRequestReward(emblem.level) }}
+                    USDT)</span>
+                  <span v-else>Processando...</span>
+                </BaseButton>
+
+                <!-- Contador e barra de progresso para renovação -->
+                <div class="mb-2 mt-4">
+                  <p class="text-gray-700">Renovação: {{ formatTimeRemaining(emblem, 'renewal') }}</p>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-purple-500 h-2.5 rounded-full" :style="{ width: emblem.renewalProgress + '%' }">
+                    </div>
+                  </div>
+                </div>
+                <BaseButton
+                  class="w-full px-4 py-3 bg-purple-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'renewal') || isProcessing }"
+                  :disabled="!isActionEnabled(emblem, 'renewal') || isProcessing" @click="renewEmblem(emblem.id)">
+                  <span v-if="!isProcessing">Renovar Emblema ({{ formatRenewalCost(emblem.level) }} USDT)</span>
+                  <span v-else>Processando...</span>
+                </BaseButton>
+              </div>
+            </BaseSection>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ section -->
+    <section id="faq" class="w-full my-24">
+      <BaseSection>
+        <div data-aos="fade-right" data-aos-delay="150" class="col-span-12 lg:col-span-6">
+          <div class="w-full">
+            <img :src="require('~/assets/img/faq.webp')" class="w-full" alt="Perguntas Frequentes" />
+          </div>
+        </div>
+        <div data-aos="fade-left" data-aos-delay="150" class="col-span-12 lg:col-span-6 px-4 sm:px-6 mt-8">
+          <span class="text-base text-gradient font-semibold uppercase mb-4 sm:mb-2">Suporte</span>
+          <h2 class="text-3xl sm:text-4xl font-semibold mb-10 sm:mb-6">Perguntas Frequentes</h2>
+
+          <ul class="shadow-box">
+            <BaseAccordion v-for="(accordion, index) in accordions" :key="index" :accordion="accordion" />
+          </ul>
+        </div>
+      </BaseSection>
+    </section>
+
+    <div class="w-full my-10 flex justify-center">
+      <a v-smooth-scroll data-aos="flip-down" data-aos-delay="150" href="#navbar"
+        class="px-6 py-3 flex items-center space-x-2 bg-[#FAFAFA] hover:bg-gray-100 hover:shadow-md border border-[#DDDDDD] rounded-md text-gray-700">
+        <span>Voltar ao Topo</span>
+        <ArrowUpIcon :size="20" />
+      </a>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ethers } from 'ethers'
+import ClockIcon from 'vue-material-design-icons/Clock.vue'
+import CurrencyUsdIcon from 'vue-material-design-icons/CurrencyUsd.vue'
+import contractABI from '../contracts/mutualaid_abi.json' // Certifique-se de que esta ABI corresponde ao seu contrato implantado
+import IERC20ABI from '../contracts/IERC20.json' // ABI do IERC20 para interagir com o USDT
+import aosMixin from '@/mixins/aos'
+
+export default {
+  name: 'IndexPage',
+  components: {
+    CurrencyUsdIcon,
+    ClockIcon,
+  },
+  mixins: [aosMixin],
+  data() {
+    return {
+      provider: null,
+      contract: null,
+      contractAddress: '0xE53fa198D2b82BdDFc3cB0EcC7060532DE520a24',
+      loadingStats: true,
+      userAddress: null,
+      inviteLink: '',
+      userEmblems: [], // Armazena os emblemas do usuário
+      isProcessing: false, // Controla o estado de processamento para evitar múltiplas ações simultâneas,
+      showModal: false,
+      isUpdating: false,
+      selectedLevelCalculator: 1, // Nível do emblema para simulação
+      calculatedData: [],
+      showModalCalculator: false,
+
+      accordions: [
+        {
+          title: 'O que é o MutualAid?',
+          description:
+            'O MutualAid é um sistema descentralizado baseado em blockchain que conecta participantes interessados em contribuições financeiras de forma sustentável e transparente.',
+        },
+        {
+          title: 'Como adquirir um emblema?',
+          description:
+            'A aquisição de emblemas é o primeiro passo para participar do sistema. Eles representam seu nível de engajamento, variando entre 1 e 50, com valores proporcionais ao nível escolhido.',
+        },
+        {
+          title: 'Como funciona a contribuição?',
+          description:
+            'A cada período determinado, você realiza uma contribuição proporcional ao nível do seu emblema, garantindo a sustentabilidade do sistema.',
+        },
+        {
+          title: 'Quando recebo distribuições?',
+          description:
+            'Distribuições podem ser solicitadas após intervalos específicos, calculadas com base no nível do seu emblema.',
+        },
+        {
+          title: 'Como funciona o bônus por indicação?',
+          description:
+            'Você recebe 5% do valor movimentado por membros indicados diretamente por você, incluindo aquisições de emblemas e contribuições regulares.',
+        },
+        {
+          title: 'O que acontece se uma solicitação não for atendida em 24 horas?',
+          description:
+            'Os valores pendentes serão liquidados em tokens Invistech, que podem ser facilmente convertidos para outras criptomoedas ou stablecoins.',
+        },
+      ],
+
+      // Dados da Fila de Ajuda
+      queue: [],
+      countdownInterval: null,
+
+      // Dados para Compra de Emblema
+      selectedLevel: 1, // Nível inicial do emblema
+      emblemBaseCost: 25, // Custo base por nível em USDT
+      commitmentBaseCost: 5, // Custo base do compromisso em USDT por nível
+      renewalMultiplier: 14.4, // Custo de renovação = nível * renewalMultiplier USDT
+      rewardMultiplier: 10.5, // Multiplicador para estimativa de recompensa
+      commitmentPeriodDays: 5, // Período de compromisso em dias
+      renewalPeriodDays: 114, // Período de renovação em dias
+      aidRequestPeriodDays: 6, // Período para solicitar ajuda em dias
+      showDetails: false, // Controla a exibição dos detalhes
+      uplineAddress: '', // Endereço do referenciador (propriedade adicionada)
+
+      commitmentPeriodSeg: 0,
+      renewalPeriodSeg: 0,
+      aidRequestPeriodSeg: 0,
+
+      // Estatísticas da Comunidade
+      stats: [],
+
+      // Estados para Compra de Emblema (propriedades adicionadas)
+      isPurchasing: false,
+      purchaseStatus: '', // 'success' ou 'error'
+      purchaseMessage: '',
+    }
+  },
+  computed: {
+    // Calcula o custo total do emblema com base no nível selecionado
+    emblemCostInUSDT() {
+      return this.selectedLevel * this.emblemBaseCost
+    },
+    // Calcula o custo do compromisso com base no nível selecionado
+    commitmentCost() {
+      return this.selectedLevel * this.commitmentBaseCost
+    },
+    // Calcula o custo de renovação com base no nível selecionado
+    renewalCost() {
+      return this.selectedLevel * this.renewalMultiplier
+    },
+    // Estima a recompensa com base no nível selecionado
+    estimatedReward() {
+      return this.selectedLevel * this.rewardMultiplier
+    },
+    // Define o rótulo do botão dinamicamente
+    buttonLabel() {
+      return this.showDetails ? 'Confirmar Compra' : 'Ver Detalhes'
+    },
+    totalQueueValue() {
+      return this.queue.reduce((total, user) => total + user.requestAmount, 0)
+    },
+  },
+  mounted() {
+    this.initialize()
+    this.startProgressUpdater();
+    this.startQueueUpdater();
+    this.fetchQueueData();
+  },
+  methods: {
+    calculateSimulation() {
+      const level = this.selectedLevelCalculator;
+      const initialCost = 25 * level; // Custo inicial do emblema
+      const commitmentCost = 5 * level; // Compromisso financeiro
+      const reward = 10.5 * level; // Recompensa
+      const renewalCost = 14.4 * level; // Custo de renovação
+      let balance = -initialCost; // Compra do emblema
+      const simulationData = [];
+      let day = 0;
+
+      // Compra inicial do emblema
+      simulationData.push({
+        day: ++day,
+        description: 'Compra de Emblema',
+        amount: -initialCost,
+        balance,
+      });
+
+      // Simular eventos até 1 ano (365 dias)
+      for (let i = 1; i <= 365; i++) {
+        day = i;
+
+        // Compromisso a cada 5 dias
+        if (day % 5 === 0) {
+          balance -= commitmentCost;
+          simulationData.push({
+            day,
+            description: 'Compromisso',
+            amount: -commitmentCost,
+            balance,
+          });
+        }
+
+        // Recompensa a cada 6 dias
+        if (day % 6 === 0) {
+          balance += reward;
+          simulationData.push({
+            day,
+            description: 'Recompensa',
+            amount: reward,
+            balance,
+          });
+        }
+
+        // Renovação no dia 114 e 228
+        if (day === 114 || day === 228) {
+          balance -= renewalCost;
+          simulationData.push({
+            day,
+            description: 'Renovação',
+            amount: -renewalCost,
+            balance,
+          });
+        }
+      }
+
+      this.calculatedData = simulationData;
+      this.showModalCalculator = true; // Exibir o modal da calculadora
+    },
+    async refreshAllSections() {
+      this.isUpdating = true; // Ativa o indicador de carregamento
+
+      try {
+        await Promise.all([
+          this.fetchUserEmblems(),
+          this.fetchStatistics(),
+          this.fetchQueueData(),
+        ]);
+      } catch (error) {
+        console.error("Erro ao atualizar seções:", error);
+      } finally {
+        this.isUpdating = false; // Desativa o indicador de carregamento
+      }
+    },
+    closeModalAndScroll() {
+      // Fecha o modal
+      this.showModal = false;
+
+      // Aguarda um pequeno delay para evitar conflitos visuais antes de rolar
+      this.$nextTick(() => {
+        this.$scrollTo('#purchase-emblem', 500); // Duração de 500ms para o scroll
+      });
+    },
+    startQueueUpdater() {
+      this.queueInterval = setInterval(() => {
+        this.queue = this.queue.map((request) => {
+          const currentTime = Math.floor(Date.now() / 1000);
+          const remainingTime = Math.max(request.expirationTime - currentTime, 0);
+
+          return {
+            ...request,
+            timeRemaining: remainingTime,
+            progress: this.calculateProgress(request.expirationTime),
+          };
+        });
+      }, 1000); // Atualiza a cada segundo
+    },
+    stopQueueUpdater() {
+      if (this.queueInterval) {
+        clearInterval(this.queueInterval);
+      }
+    },
+    calculateProgress(expirationTime) {
+      const totalDuration = 24 * 3600; // 24 horas em segundos
+      const currentTime = Math.floor(Date.now() / 1000);
+      const remainingTime = Math.max(expirationTime - currentTime, 0);
+
+      return (remainingTime / totalDuration) * 100;
+    },
+    startProgressUpdater() {
+      this.progressInterval = setInterval(() => {
+        this.userEmblems = this.userEmblems.map((emblem) => {
+          return {
+            ...emblem,
+            commitmentProgress: this.getProgress(emblem, 'commitment'),
+            aidProgress: this.getProgress(emblem, 'aid'),
+            renewalProgress: this.getProgress(emblem, 'renewal'),
+          };
+        });
+      }, 1000); // Atualiza a cada segundo
+    },
+    stopProgressUpdater() {
+      if (this.progressInterval) {
+        clearInterval(this.progressInterval);
+      }
+    },
+    beforeDestroy() {
+      this.stopProgressUpdater();
+      this.stopQueueUpdater();
+    },
+    getProgress(emblem, action) {
+      let period;
+      let total;
+
+      if (action === 'commitment') {
+        period = emblem.commitmentTime.toNumber();
+        total = this.commitmentPeriodSeg;
+      } else if (action === 'renewal') {
+        period = emblem.expiryTime.toNumber();
+        total = this.renewalPeriodSeg;
+      } else if (action === 'aid') {
+        period = emblem.aidRequestTime.toNumber();
+        total = this.aidRequestPeriodSeg;
+      }
+
+      const remaining = period - Math.floor(Date.now() / 1000);
+      return Math.max((remaining / total) * 100, 0); // Evita valores negativos
+    },
+    formatTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${hours}h ${minutes}m ${secs}s`;
+    },
+    formatTimeRemaining(emblem, action) {
+      let period;
+      if (action === 'commitment') {
+        period = emblem.commitmentTime.toNumber();
+      } else if (action === 'renewal') {
+        period = emblem.expiryTime.toNumber();
+      } else if (action === 'aid') {
+        period = emblem.aidRequestTime.toNumber();
+      }
+
+      const remaining = period - Math.floor(Date.now() / 1000);
+
+      if (remaining <= 0) {
+        return `0h 0m 0s`;
+      }
+
+      const hours = Math.floor(remaining / 3600);
+      const minutes = Math.floor((remaining % 3600) / 60);
+      const seconds = Math.floor(remaining % 60);
+
+      return `${hours}h ${minutes}m ${seconds}s`;
+    },
+
+    // Verifica se a ação está habilitada
+    isActionEnabled(emblem, action) {
+      let period;
+      if (action === 'commitment') {
+        period = emblem.commitmentTime.toNumber();
+      } else if (action === 'renewal') {
+        period = emblem.expiryTime.toNumber();
+      } else if (action === 'aid') {
+        period = emblem.aidRequestTime.toNumber();
+      }
+
+      const remaining = period - (Date.now() / 1000)
+
+      if (remaining <= 0) {
+        return true
+      }
+
+      return false
+    },
+
+    // Método para copiar o link de convite para a área de transferência
+    async copyInviteLink() {
+      try {
+        await navigator.clipboard.writeText(this.inviteLink)
+        this.$toast.success('Link de convite copiado com sucesso!')
+      } catch (error) {
+        console.error('Erro ao copiar o link:', error)
+        this.$toast.error('Falha ao copiar o link.')
+      }
+    },
+
+    // Método para verificar e salvar o uplineAddress a partir da URL
+    checkInviteLink() {
+      const path = this.$route.path
+      const inviteRegex = /^\/invite\/(0x[a-fA-F0-9]{40})$/
+      const match = path.match(inviteRegex)
+      if (match && match[1]) {
+        localStorage.setItem('uplineAddress', match[1])
+      }
+    },
+
+    // Atualize o método `initialize` para chamar `checkInviteLink`
+    async initialize() {
+      try {
+        // Chama o método para verificar o link de convite
+        this.checkInviteLink()
+
+        // Verifica se o provedor Ethereum está disponível
+        if (window.ethereum) {
+          this.provider = new ethers.providers.Web3Provider(window.ethereum)
+
+          // Solicita acesso à conta
+          await window.ethereum.request({ method: 'eth_requestAccounts' })
+
+          // Obtém o signer
+          const signer = this.provider.getSigner()
+
+          // Inicializa o contrato com o signer
+          this.contract = new ethers.Contract(this.contractAddress, contractABI, signer)
+
+          // Obtém o endereço do usuário
+          this.userAddress = await this.provider.getSigner().getAddress()
+
+          // Gera o link de convite
+          this.inviteLink = `https://endereco-da-plataforma.com/invite/${this.userAddress}`
+
+          // Busca as estatísticas
+          await this.fetchStatistics();
+
+          // Busca tempo dos emblemas
+          await this.allPeriodSeg();
+
+          await this.fetchQueueData();
+
+          if (this.contract && this.userAddress) {
+            await this.fetchUserEmblems()
+          }
+        } else {
+          alert('Por favor, instale uma carteira Ethereum como o MetaMask.')
+          console.error('Ethereum provider not found')
+        }
+      } catch (error) {
+        console.error('Erro ao inicializar:', error)
+        this.loadingStats = false
+      }
+    },
+    async allPeriodSeg() {
+      try {
+        // Chama as funções assíncronas do contrato para obter os períodos
+        const commitmentPeriod = await this.contract.commitmentPeriod(); // Pega o valor do compromisso
+        const renewalPeriod = await this.contract.emblemExpiryPeriod(); // Pega o valor da renovação
+        const aidRequestPeriod = await this.contract.aidRequestPeriod(); // Pega o valor da solicitação de ajuda
+
+        // Converte os valores para o formato necessário
+        this.commitmentPeriodSeg = commitmentPeriod.toNumber();
+        this.renewalPeriodSeg = renewalPeriod.toNumber();
+        this.aidRequestPeriodSeg = aidRequestPeriod.toNumber();
+
+      } catch (error) {
+        console.error('Erro ao buscar os períodos do contrato:', error);
+      }
+    },
+    async fetchStatistics() {
+      try {
+        const data = await this.contract.getStatistics();
+
+        this.stats = [
+          { label: 'Compromissos Realizados', value: data._totalCommitmentsMade?.toNumber() || 0 },
+          { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
+          { label: 'Renovações Concluídas', value: data._totalRenewals?.toNumber() || 0 },
+          { label: 'Valor Total em Renovações (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)).toFixed(2)}` },
+          // { label: 'Tamanho da Fila', value: data._queueSize?.toNumber() || 0 },
+          { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
+          { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
+          { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
+          { label: 'Contribuições Totais (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalDonated || 0, 18)).toFixed(2)}` },
+          { label: 'Bonificações Pagas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18)).toFixed(2)}` },
+          { label: 'Enviado para Gestão Financeira (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18)).toFixed(2)}` },
+          { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
+          { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
+        ];
+      } catch (error) {
+        console.error('Erro ao obter estatísticas:', error.message);
+      } finally {
+        this.loadingStats = false;
+      }
+    },
+    // Alterna entre mostrar detalhes e confirmar a compra
+    toggleDetails() {
+      this.showDetails = !this.showDetails
+    },
+    // Método para lidar com a compra do emblema
+    async handlePurchase() {
+      if (this.showDetails) {
+        // Se já estiver mostrando os detalhes, proceder com a compra
+        await this.purchaseEmblem()
+      } else {
+        // Caso contrário, mostrar os detalhes
+        this.toggleDetails()
+      }
+    },
+    async purchaseEmblem() {
+      this.isPurchasing = true
+      this.purchaseStatus = ''
+      this.purchaseMessage = ''
+
+      try {
+        // Validações básicas
+        if (this.selectedLevel < 1 || this.selectedLevel > 50) {
+          throw new Error('O nível do emblema deve estar entre 1 e 50.')
+        }
+
+        const cost = ethers.utils.parseUnits(this.emblemCostInUSDT.toString(), 18)
+
+        // Instancia o contrato USDT usando a ABI IERC20
+        const usdtAddress = await this.contract.usdtToken()
+        const usdtContract = new ethers.Contract(usdtAddress, IERC20ABI, this.provider.getSigner())
+
+        // Verifica o saldo de USDT do usuário
+        const userAddress = await this.provider.getSigner().getAddress()
+        const usdtBalance = await usdtContract.balanceOf(userAddress)
+
+        if (usdtBalance.lt(cost)) {
+          throw new Error('Saldo insuficiente de USDT.')
+        }
+
+        // Verifica se a aprovação é necessária
+        const allowance = await usdtContract.allowance(userAddress, this.contractAddress)
+        if (allowance.lt(cost)) {
+          // Solicita aprovação
+          const approveTx = await usdtContract.approve(this.contractAddress, ethers.constants.MaxUint256)
+          await approveTx.wait()
+        }
+
+        // Obtém o uplineAddress do localStorage
+        const storedUpline = localStorage.getItem('uplineAddress')
+        const upline = storedUpline || ethers.constants.AddressZero
+
+        // Realiza a compra do emblema
+        const purchaseTx = await this.contract.purchaseEmblem(this.selectedLevel, upline)
+
+        // Aguarda a confirmação da transação
+        await purchaseTx.wait()
+
+        // Atualiza as estatísticas após a compra
+        await this.refreshAllSections();
+
+        // Reseta os campos
+        this.selectedLevel = 1
+        // Não é mais necessário resetar o uplineAddress
+        this.showDetails = false
+
+        // Opcional: Limpar o uplineAddress do localStorage após a compra
+        localStorage.removeItem('uplineAddress')
+
+        // Exibe mensagem de sucesso
+        this.purchaseStatus = 'success'
+        this.purchaseMessage = 'Emblema comprado com sucesso!'
+        this.$toast.success(this.purchaseMessage) // Notificação de sucesso
+      } catch (error) {
+        if (error.code === 'ACTION_REJECTED') {
+          this.purchaseStatus = 'error'
+          this.purchaseMessage = 'Transação cancelada pelo usuário.'
+          this.$toast.error(this.purchaseMessage)
+        } else {
+          console.error('Erro ao comprar emblema:', error)
+          this.purchaseStatus = 'error'
+          this.purchaseMessage = 'Ocorreu um erro ao comprar o emblema.'
+          this.$toast.error(this.purchaseMessage)
+        }
+      } finally {
+        this.isPurchasing = false
+      }
+    },
+    timeRemaining(user) {
+      const timeElapsed = (Date.now() - user.joinTime) / (1000 * 3600) // Horas desde a entrada na fila
+      return Math.max(24 - timeElapsed, 0).toFixed(2) // Horas restantes
+    },
+    timeRemainingPercentage(user) {
+      const totalDuration = 24 // duração total em horas
+      const remaining = this.timeRemaining(user)
+      return (remaining / totalDuration) * 100
+    },
+
+    async fetchUserEmblems() {
+      if (!this.provider) return
+      try {
+        const emblems = await this.contract.getUserEmblems(this.userAddress)
+        this.userEmblems = emblems
+      } catch (error) {
+        console.error('Erro ao buscar emblemas do usuário:', error)
+      }
+    },
+
+    // Método para fazer compromisso em um emblema
+    async makeCommitment(emblemId) {
+      this.isProcessing = true
+      try {
+        const tx = await this.contract.makeCommitment(emblemId)
+        await tx.wait()
+        this.$toast.success('Compromisso realizado com sucesso.')
+        await this.refreshAllSections();
+      } catch (error) {
+        console.error('Erro ao fazer compromisso:', error)
+        this.$toast.error('Falha ao realizar compromisso.')
+      } finally {
+        this.isProcessing = false
+      }
+    },
+
+    // Método para pedir ajuda em um emblema
+    async requestAid(emblemId) {
+      this.isProcessing = true
+      try {
+        const tx = await this.contract.requestAid(emblemId)
+        await tx.wait()
+        this.$toast.success('Pedido de ajuda realizado com sucesso.')
+        await this.refreshAllSections();
+      } catch (error) {
+        console.error('Erro ao pedir ajuda:', error)
+        this.$toast.error('Falha ao solicitar ajuda.')
+      } finally {
+        this.isProcessing = false
+      }
+    },
+
+    // Método para renovar um emblema
+    async renewEmblem(emblemId) {
+      this.isProcessing = true
+      try {
+        const tx = await this.contract.renewEmblem(emblemId)
+        await tx.wait()
+        this.$toast.success('Emblema renovado com sucesso.')
+        await this.refreshAllSections();
+      } catch (error) {
+        console.error('Erro ao renovar emblema:', error)
+        this.$toast.error('Falha ao renovar o emblema.')
+      } finally {
+        this.isProcessing = false
+      }
+    },
+
+    formatTotalEarned(totalEarned) {
+      if (!totalEarned) return "0.00"; // Caso o valor seja nulo ou indefinido
+      try {
+        // Converte de Wei para USDT e formata para duas casas decimais
+        return parseFloat(ethers.utils.formatUnits(totalEarned, 18)).toFixed(2);
+      } catch (error) {
+        console.error("Erro ao formatar o ganho total:", error);
+        return "0.00"; // Retorna um valor padrão em caso de erro
+      }
+    },
+
+    // Formata a data em formato legível
+    formatDate(timestamp) {
+      return new Date(timestamp * 1000).toLocaleDateString('pt-BR')
+    },
+
+    async fetchQueueData() {
+      if (!this.contract) return;
+
+      try {
+        // Obtém o índice de início da fila (ordens não processadas)
+        const queueStartIndex = (await this.contract.queueStartIndex()).toNumber();
+
+        // Define o número máximo de ordens para buscar (ajuste conforme necessário)
+        const maxQueueSize = 10;
+
+        // Busca os dados da fila a partir de `queueStartIndex`
+        const queueData = await this.contract.getaidQueue(queueStartIndex, queueStartIndex + maxQueueSize, 2);
+
+        // Define o horário atual em segundos
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        // Processa os dados da fila
+        this.queue = queueData.map((item) => {
+          const expirationTime = item.expirationTime.toNumber();
+          const remainingTime = expirationTime - currentTime;
+
+          return {
+            user: item.user,
+            emblemId: item.emblemId,
+            totalAidAmount: parseFloat(ethers.utils.formatUnits(item.remainingAid.add(item.receivedAmount), 18)).toFixed(2),
+            remainingAid: parseFloat(ethers.utils.formatUnits(item.remainingAid, 18)).toFixed(2),
+            receivedAmount: parseFloat(ethers.utils.formatUnits(item.receivedAmount, 18)).toFixed(2),
+            expirationTime,
+            timeRemaining: Math.max(remainingTime, 0),
+            status: item.status,
+          };
+        });
+
+        // Calcula o valor total restante na fila
+        const totalRemainingAid = this.queue.reduce((total, item) => {
+          return total + parseFloat(item.remainingAid);
+        }, 0);
+
+        // Atualiza a estatística "Valor Total na Fila"
+        const index = this.stats.findIndex((stat) => stat.label === 'Valor Total na Fila de Distribuição (USDT)');
+        if (index !== -1) {
+          this.stats[index].value = `${totalRemainingAid.toFixed(2)} USDT`;
+        } else {
+          this.stats.push({
+            label: 'Valor Total na Fila de Distribuição (USDT)',
+            value: `${totalRemainingAid.toFixed(2)} USDT`,
+          });
+        }
+
+        // Se não houver itens na fila, limpa o array para mostrar a mensagem de vazio
+        if (this.queue.length === 0) {
+          this.queue = [];
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados da fila:', error);
+      }
+    },
+    // Formata o tempo restante para exibição no formato "Xh Ym"
+    formatTimeRemainingForQueue(request) {
+      const seconds = request.timeRemaining || 0;
+
+      if (seconds <= 0) return 'Expirado';
+
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+
+      return `${hours}h ${minutes}m`;
+    },
+
+    // Calcula a porcentagem de tempo restante para a barra de progresso
+    timeRemainingPercentageForQueue(user) {
+      const maxWaitTime = 24 * 3600; // 24 horas em segundos
+      return ((user.timeRemaining || 0) / maxWaitTime) * 100;
+    },
+    compactAddress(address) {
+      if (!address || address.length !== 42) {
+        throw new Error('Endereço inválido');
+      }
+      return address.substring(0, 6) + '...' + address.substring(address.length - 4);
+    },
+    formatCommitmentCost(level) {
+      return (level * this.commitmentBaseCost).toFixed(2); // Cálculo do custo do compromisso
+    },
+    formatRenewalCost(level) {
+      return (level * this.renewalMultiplier).toFixed(2); // Cálculo do custo da renovação
+    },
+    formatAidRequestReward(level) {
+      return (level * this.rewardMultiplier).toFixed(2); // Estimativa de recompensa de ajuda
+    },
+  },
+}
+</script>
+
+<style scoped>
+.text-header-gradient {
+  background: linear-gradient(169.4deg, #3984f4 -6.01%, #0cd3ff 36.87%, #2f7cf0 78.04%, #0e65e8 103.77%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #09f;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para mensagens de sucesso e erro */
+.text-success {
+  color: #38a169;
+  /* Verde */
+}
+
+.text-error {
+  color: #e53e3e;
+  /* Vermelho */
+}
+
+/* Botão flutuante */
+button.fixed {
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button.fixed:hover {
+  transform: scale(1.1);
+}
+
+/* Estilo do Modal */
+div.fixed.inset-0 {
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+}
+</style>
