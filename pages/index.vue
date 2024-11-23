@@ -5,7 +5,7 @@
       <BaseSection>
         <div class="col-span-12 lg:col-span-6 mt-12 xl:mt-10 space-y-4 sm:space-y-6 px-6 text-center sm:text-left">
           <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">Bem-vindo ao
-            RendaPassivaGlobal</span>
+            InvisTribe</span>
           <h1 data-aos="fade-right"
             class="text-[2.5rem] sm:text-5xl xl:text-6xl font-bold leading-tight capitalize sm:pr-8 xl:pr-10">
             Unindo Pessoas em uma <span class="text-header-gradient">Comunidade de Renda Passiva</span>
@@ -303,6 +303,17 @@
             <LandingListItem title="Sistema Eficiente e Otimizado para Máximos Resultados" />
             <LandingListItem title="Conversão Fácil para USDT ou Outras Criptomoedas" />
           </ul>
+          <!-- Botões adicionados -->
+          <div class="flex space-x-4 mt-6">
+            <BaseButton class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
+              @click="navigateToBuyInvistech">
+              Comprar Tokens Invistech
+            </BaseButton>
+            <BaseButton class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
+              @click="viewPriceChart">
+              Ver Gráfico de Preço
+            </BaseButton>
+          </div>
         </div>
         <div data-aos="fade-left" class="col-span-12 lg:col-span-6">
           <div class="w-full">
@@ -311,6 +322,46 @@
         </div>
       </BaseSection>
     </section>
+
+    <!-- Modal para o Gráfico de Preço -->
+    <div v-if="showPriceChartModal"
+      class="modal-price fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+      <div class="w-full h-full bg-white">
+        <!-- Modal Header -->
+        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+          <h2 class="text-lg font-semibold">Gráfico de Preço - Token Invistech</h2>
+          <button @click="showPriceChartModal = false" class="text-white hover:text-gray-300 text-lg">✕</button>
+        </div>
+        <!-- Modal Content -->
+        <style>
+          #dexscreener-embed {
+            position: relative;
+            width: 100%;
+            padding-bottom: 125%;
+          }
+
+          @media(min-width:1400px) {
+            #dexscreener-embed {
+              padding-bottom: 65%;
+            }
+          }
+
+          #dexscreener-embed iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 0;
+          }
+        </style>
+        <div id="dexscreener-embed"><iframe
+            src="https://dexscreener.com/bsc/0xCEBB17C174195D99A1d121e8186Bd3a5aB6911E0?embed=1&loadChartSettings=0&chartDefaultOnMobile=1&chartTheme=dark&theme=light&chartStyle=1&chartType=usd&interval=60"></iframe>
+        </div>
+      </div>
+    </div>
+
+
 
     <!-- Nova Seção: Bônus de Indicação -->
     <section id="referral-bonus" class="w-full my-24">
@@ -334,6 +385,11 @@
             <LandingListItem title="Bônus Aplicado em Compras, Tarefas e Renovações dos Indicados" />
             <LandingListItem title="Amplie Seus Ganhos e Ajude a Comunidade a Crescer" />
           </ul>
+
+          <button class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+            @click="openAffiliatesModal">
+            Ver Afiliados
+          </button>
         </div>
       </BaseSection>
     </section>
@@ -348,7 +404,7 @@
       <div class="w-full text-center mb-12">
         <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-800">📊 Estatísticas da Comunidade</h2>
         <p data-aos="fade-up" data-aos-delay="200" class="text-gray-600 mt-4 text-lg">
-          Acompanhe o desempenho e as interações da comunidade dentro da rede MutualAid.
+          Acompanhe o desempenho e as interações da comunidade dentro da rede InvisTribe.
         </p>
       </div>
 
@@ -402,14 +458,12 @@
       </button>
 
       <!-- Modal de Tela Cheia -->
-      <div v-if="showModal" class="fixed inset-0 z-40 bg-white overflow-y-auto transition-opacity"
+      <div v-if="showModal" class="modal-emblem fixed inset-0 z-40 bg-white overflow-y-auto transition-opacity"
         @click.self="showModal = false">
         <!-- Modal Header -->
         <div class="sticky top-0 bg-blue-500 text-white p-4 flex justify-between items-center">
           <h2 class="text-xl font-bold">Meus Emblemas</h2>
-          <button class="text-white hover:text-gray-200 focus:outline-none" @click="showModal = false">
-            ✕
-          </button>
+          <button class="text-white hover:text-gray-200 focus:outline-none" @click="showModal = false">✕</button>
         </div>
 
         <!-- Emblemas do Usuário -->
@@ -519,6 +573,41 @@
       </BaseSection>
     </section>
 
+    <!-- Modal de Afiliados -->
+    <div v-if="showAffiliatesModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
+        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+          <h2 class="text-lg font-semibold">Minha Rede de Afiliados</h2>
+          <button @click="showAffiliatesModal = false" class="text-white hover:text-gray-300">
+            ✕
+          </button>
+        </div>
+        <div class="p-6 overflow-auto max-h-[70vh]">
+          <table class="w-full text-left border-collapse border border-gray-300">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-4 py-2 border border-gray-300">Endereço</th>
+                <th class="px-4 py-2 border border-gray-300">Data de Adesão</th>
+                <th class="px-4 py-2 border border-gray-300">Bônus Recebido (USDT)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(affiliate, index) in affiliates" :key="index"
+                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+                <td class="px-4 py-2 border border-gray-300">{{ compactAddress(affiliate.referredAddress) }}</td>
+                <td class="px-4 py-2 border border-gray-300">{{ formatDate(affiliate.joinDate) }}</td>
+                <td class="px-4 py-2 border border-gray-300 text-right">
+                  {{ parseFloat(ethers.utils.formatUnits(affiliate.bonusReceived, 18)).toFixed(2) }} USDT
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p v-if="affiliates.length === 0" class="text-center text-gray-600 mt-4">Você ainda não tem afiliados
+            cadastrados. 🙁</p>
+        </div>
+      </div>
+    </div>
+
     <div class="w-full my-10 flex justify-center">
       <a v-smooth-scroll data-aos="flip-down" data-aos-delay="150" href="#navbar"
         class="px-6 py-3 flex items-center space-x-2 bg-[#FAFAFA] hover:bg-gray-100 hover:shadow-md border border-[#DDDDDD] rounded-md text-gray-700">
@@ -559,12 +648,15 @@ export default {
       selectedLevelCalculator: 1, // Nível do emblema para simulação
       calculatedData: [],
       showModalCalculator: false,
+      showAffiliatesModal: false, // Controla a exibição do modal
+      affiliates: [], // Lista de afiliados
+      showPriceChartModal: false,
 
       accordions: [
         {
-          title: 'O que é o MutualAid?',
+          title: 'O que é o InvisTribe?',
           description:
-            'O MutualAid é um sistema descentralizado baseado em blockchain que conecta participantes interessados em contribuições financeiras de forma sustentável e transparente.',
+            'O InvisTribe é um sistema descentralizado baseado em blockchain que conecta participantes interessados em contribuições financeiras de forma sustentável e transparente.',
         },
         {
           title: 'Como adquirir um emblema?',
@@ -1023,9 +1115,6 @@ export default {
         // Não é mais necessário resetar o uplineAddress
         this.showDetails = false
 
-        // Opcional: Limpar o uplineAddress do localStorage após a compra
-        localStorage.removeItem('uplineAddress')
-
         // Exibe mensagem de sucesso
         this.purchaseStatus = 'success'
         this.purchaseMessage = 'Emblema comprado com sucesso!'
@@ -1218,6 +1307,32 @@ export default {
     formatAidRequestReward(level) {
       return (level * this.rewardMultiplier).toFixed(2); // Estimativa de recompensa de ajuda
     },
+    async fetchAffiliates() {
+      if (!this.contract || !this.userAddress) return;
+
+      try {
+        const referrals = await this.contract.getReferralDetails(this.userAddress);
+        this.affiliates = referrals.map((referral) => ({
+          referredAddress: referral.referredAddress,
+          joinDate: referral.joinDate.toNumber(),
+          bonusReceived: referral.bonusReceived,
+        }));
+      } catch (error) {
+        console.error("Erro ao buscar afiliados:", error);
+        this.$toast.error("Falha ao carregar os dados de afiliados.");
+      }
+    },
+    openAffiliatesModal() {
+      this.fetchAffiliates();
+      this.showAffiliatesModal = true;
+    },
+    navigateToBuyInvistech() {
+      window.open('https://pancakeswap.finance/?outputCurrency=0xAA217F7BAb90100419b99c027adCf5F0A005C192', '_blank');
+    },
+    // Redireciona para o gráfico de preço do token Invistech
+    viewPriceChart() {
+      this.showPriceChartModal = true;
+    },
   },
 }
 </script>
@@ -1272,10 +1387,34 @@ button.fixed:hover {
   transform: scale(1.1);
 }
 
-/* Estilo do Modal */
-div.fixed.inset-0 {
-  background: rgba(0, 0, 0, 0.75);
+/* Modal de Emblemas */
+.modal-emblem {
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
+}
+
+.modal-emblem .sticky {
+  position: sticky;
+  top: 0;
+}
+
+.modal-emblem .p-6 {
+  padding: 1.5rem;
+}
+
+/* Modal de Gráfico de Preço */
+.modal-price {
+  background: rgba(0, 0, 0, 0.75);
+  /* Fundo escuro translúcido */
+}
+
+.modal-price iframe {
+  border: none;
+}
+
+.modal-price .w-full {
+  width: 100%;
+  height: 100%;
 }
 </style>

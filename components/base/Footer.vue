@@ -8,12 +8,12 @@
 
       <!-- Descrição -->
       <p class="text-gray-700 text-sm">
-        MutualAid é uma comunidade de ajuda mútua que une pessoas para apoio financeiro em um ambiente transparente e
+        InvisTribe é uma comunidade de renda passiva que une pessoas para apoio financeiro em um ambiente transparente e
         seguro.
       </p>
 
       <!-- Direitos autorais -->
-      <div class="text-gray-500 text-xs">&copy; 2024 MutualAid. Todos os direitos reservados.</div>
+      <div class="text-gray-500 text-xs">&copy; 2024 InvisTribe. Todos os direitos reservados.</div>
     </div>
   </footer>
 </template>
