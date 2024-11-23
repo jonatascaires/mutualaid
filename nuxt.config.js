@@ -1,5 +1,8 @@
 export default {
-  mode: 'universal', // ou 'spa'
+  server: {
+    host: '0.0.0.0',
+    port: 3001
+  },
   head: {
     title: 'InvisTribe',
     htmlAttrs: {
