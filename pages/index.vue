@@ -987,7 +987,7 @@ export default {
           this.userAddress = await this.provider.getSigner().getAddress()
 
           // Gera o link de convite
-          this.inviteLink = `https://endereco-da-plataforma.com/invite/${this.userAddress}`
+          this.inviteLink = `https://invistribe.com/invite/${this.userAddress}`
 
           // Busca as estatísticas
           await this.fetchStatistics();

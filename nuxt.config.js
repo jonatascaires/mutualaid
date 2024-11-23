@@ -1,6 +1,7 @@
 export default {
+  mode: 'universal', // ou 'spa'
   head: {
-    title: 'NEFA',
+    title: 'InvisTribe',
     htmlAttrs: {
       lang: 'en',
     },
