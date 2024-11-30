@@ -39,7 +39,6 @@
               alt="Comunidade de Renda Passiva" />
           </div>
         </div>
-        <!-- Imagens decorativas omitidas para brevidade -->
       </BaseSection>
     </section>
 
@@ -199,33 +198,10 @@
       </BaseSection>
     </section>
 
-    <!-- Seção de Link de Convite -->
-    <section id="invite-link" class="w-full my-24">
-      <BaseSection>
-        <div class="col-span-12 mt-4 xl:mt-20 space-y-6 px-4">
-          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            Compartilhe seu <span class="text-header-gradient">Link de Convite</span>
-          </h2>
-          <p class="paragraph">
-            Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe
-            bônus ao trazer novos membros!
-          </p>
-          <div v-if="userAddress" class="flex items-center space-x-4">
-            <input type="text" :value="inviteLink" readonly
-              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-            <BaseButton class="px-4 py-2 bg-blue-500 text-white rounded-lg" @click="copyInviteLink">
-              Copiar
-            </BaseButton>
-          </div>
-          <div v-else class="text-gray-600">Por favor, conecte sua carteira para gerar seu link de convite.</div>
-        </div>
-      </BaseSection>
-    </section>
-
     <!-- Sessão da Calculadora -->
     <section id="investment-calculator" class="w-full my-24">
       <BaseSection>
-        <div class="col-span-12 lg:col-span-6 space-y-6 px-4">
+        <div class="col-span-12 mt-4 xl:mt-20 space-y-6 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
             Simule Seus <span class="text-header-gradient">Ganhos</span>
           </h2>
@@ -317,7 +293,8 @@
         </div>
         <div data-aos="fade-left" class="col-span-12 lg:col-span-6">
           <div class="w-full">
-            <img :src="require('~/assets/img/hero-image.webp')" class="w-full" alt="Parceria com o Token Invistech" />
+            <img :src="require('~/assets/img/img-sections/token_invistech.png')" class="w-full"
+              alt="Parceria com o Token Invistech" />
           </div>
         </div>
       </BaseSection>
@@ -361,14 +338,13 @@
       </div>
     </div>
 
-
-
     <!-- Nova Seção: Bônus de Indicação -->
     <section id="referral-bonus" class="w-full my-24">
       <BaseSection>
         <div data-aos="fade-right" class="col-span-12 lg:col-span-6">
           <div class="w-full">
-            <img :src="require('~/assets/img/hero-image.webp')" class="w-full" alt="Bônus de Indicação" />
+            <img :src="require('~/assets/img/img-sections/referral_bonus.png')" class="w-full"
+              alt="Bônus de Indicação" />
           </div>
         </div>
         <div data-aos="fade-left" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
@@ -390,6 +366,29 @@
             @click="openAffiliatesModal">
             Ver Afiliados
           </button>
+        </div>
+      </BaseSection>
+    </section>
+
+    <!-- Seção de Link de Convite -->
+    <section id="invite-link" class="w-full my-24">
+      <BaseSection>
+        <div class="col-span-12 px-4">
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+            Compartilhe seu <span class="text-header-gradient">Link de Convite</span>
+          </h2>
+          <p class="paragraph">
+            Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe
+            bônus ao trazer novos membros!
+          </p>
+          <div v-if="userAddress" class="flex items-center space-x-4">
+            <input type="text" :value="inviteLink" readonly
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <BaseButton class="px-4 py-2 bg-blue-500 text-white rounded-lg" @click="copyInviteLink">
+              Copiar
+            </BaseButton>
+          </div>
+          <div v-else class="text-gray-600">Por favor, conecte sua carteira para gerar seu link de convite.</div>
         </div>
       </BaseSection>
     </section>
@@ -425,7 +424,8 @@
       <BaseSection data-aos="fade-down">
         <div class="col-span-12 lg:col-span-7">
           <div class="w-full">
-            <img :src="require('~/assets/img/hero-image.webp')" class="w-[95%]" alt="Segurança e Transparência" />
+            <img :src="require('~/assets/img/img-sections/security.png')" class="w-[95%]"
+              alt="Segurança e Transparência" />
           </div>
         </div>
         <div class="col-span-12 lg:col-span-5 space-y-6 px-4 sm:px-6 mt-20">
@@ -444,10 +444,16 @@
           </ul>
           <BaseButton
             class="w-full sm:max-w-[240px] px-10 py-4 bg-inherit text-gradient border border-[#0c66ee] text-base"
-            @click="$scrollTo('#faq')">Saiba Mais</BaseButton>
+            @click="showContractModal">
+            Saiba Mais
+          </BaseButton>
         </div>
       </BaseSection>
     </section>
+
+    <!-- Modal -->
+    <ContractModal v-if="isContractModalVisible" :isContractModalVisible="isContractModalVisible"
+      @close="isContractModalVisible = false" />
 
     <div class="w-full relative">
       <!-- Botão Flutuante -->
@@ -518,7 +524,7 @@
 
                 <!-- Contador e barra de progresso para solicitação de ajuda -->
                 <div class="mb-2 mt-4">
-                  <p class="text-gray-700">Solicitação de Ajuda: {{ formatTimeRemaining(emblem, 'aid') }}</p>
+                  <p class="text-gray-700">Solicitação de Recompensa: {{ formatTimeRemaining(emblem, 'aid') }}</p>
                   <div class="w-full bg-gray-200 rounded-full h-2.5">
                     <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: emblem.aidProgress + '%' }"></div>
                   </div>
@@ -559,7 +565,7 @@
       <BaseSection>
         <div data-aos="fade-right" data-aos-delay="150" class="col-span-12 lg:col-span-6">
           <div class="w-full">
-            <img :src="require('~/assets/img/faq.webp')" class="w-full" alt="Perguntas Frequentes" />
+            <img :src="require('~/assets/img/img-sections/faq.png')" class="w-full" alt="Perguntas Frequentes" />
           </div>
         </div>
         <div data-aos="fade-left" data-aos-delay="150" class="col-span-12 lg:col-span-6 px-4 sm:px-6 mt-8">
@@ -592,13 +598,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(affiliate, index) in affiliates" :key="index"
-                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                <td class="px-4 py-2 border border-gray-300">{{ compactAddress(affiliate.referredAddress) }}</td>
-                <td class="px-4 py-2 border border-gray-300">{{ formatDate(affiliate.joinDate) }}</td>
-                <td class="px-4 py-2 border border-gray-300 text-right">
-                  {{ parseFloat(ethers.utils.formatUnits(affiliate.bonusReceived, 18)).toFixed(2) }} USDT
-                </td>
+              <tr v-for="(affiliate, index) in affiliates" :key="affiliate.referredAddress || index">
+                <td class="text-center">{{ formatAddress(affiliate.referredAddress) }}</td>
+                <td class="text-center">{{ new Date(affiliate.joinDate * 1000).toLocaleDateString() }}</td>
+                <td class="text-center">{{ affiliate.bonusReceived }} USDT</td>
               </tr>
             </tbody>
           </table>
@@ -624,6 +627,7 @@ import ClockIcon from 'vue-material-design-icons/Clock.vue'
 import CurrencyUsdIcon from 'vue-material-design-icons/CurrencyUsd.vue'
 import contractABI from '../contracts/mutualaid_abi.json' // Certifique-se de que esta ABI corresponde ao seu contrato implantado
 import IERC20ABI from '../contracts/IERC20.json' // ABI do IERC20 para interagir com o USDT
+import ContractModal from "@/components/ContractModal.vue";
 import aosMixin from '@/mixins/aos'
 
 export default {
@@ -631,13 +635,15 @@ export default {
   components: {
     CurrencyUsdIcon,
     ClockIcon,
+    ContractModal
   },
   mixins: [aosMixin],
   data() {
     return {
+      isContractModalVisible: false,
       provider: null,
       contract: null,
-      contractAddress: '0xE53fa198D2b82BdDFc3cB0EcC7060532DE520a24',
+      contractAddress: '0x4460081014F07649102828A3da9320cd5cFB8fA7',
       loadingStats: true,
       userAddress: null,
       inviteLink: '',
@@ -746,12 +752,21 @@ export default {
     this.fetchQueueData();
   },
   methods: {
+    showContractModal() {
+      this.isContractModalVisible = true;
+    },
+    formatAddress(address) {
+      if (!address || address.length !== 42) {
+        return address; // Retorna o endereço original se for inválido
+      }
+      return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+    },
     calculateSimulation() {
       const level = this.selectedLevelCalculator;
-      const initialCost = 25 * level; // Custo inicial do emblema
+      const initialCost = 30 * level; // Custo inicial do emblema
       const commitmentCost = 5 * level; // Compromisso financeiro
-      const reward = 10.5 * level; // Recompensa
-      const renewalCost = 14.4 * level; // Custo de renovação
+      const reward = 13 * level; // Recompensa
+      const renewalCost = 30 * level; // Custo de renovação
       let balance = -initialCost; // Compra do emblema
       const simulationData = [];
       let day = 0;
@@ -769,7 +784,7 @@ export default {
         day = i;
 
         // Compromisso a cada 5 dias
-        if (day % 5 === 0) {
+        if (day % 6 === 0) {
           balance -= commitmentCost;
           simulationData.push({
             day,
@@ -780,7 +795,7 @@ export default {
         }
 
         // Recompensa a cada 6 dias
-        if (day % 6 === 0) {
+        if (day % 7 === 0) {
           balance += reward;
           simulationData.push({
             day,
@@ -791,7 +806,7 @@ export default {
         }
 
         // Renovação no dia 114 e 228
-        if (day === 114 || day === 228) {
+        if (day === 150 || day === 300) {
           balance -= renewalCost;
           simulationData.push({
             day,
@@ -815,7 +830,7 @@ export default {
           this.fetchQueueData(),
         ]);
       } catch (error) {
-        console.error("Erro ao atualizar seções:", error);
+        // console.error("Erro ao atualizar seções:", error);
       } finally {
         this.isUpdating = false; // Desativa o indicador de carregamento
       }
@@ -949,7 +964,7 @@ export default {
         await navigator.clipboard.writeText(this.inviteLink)
         this.$toast.success('Link de convite copiado com sucesso!')
       } catch (error) {
-        console.error('Erro ao copiar o link:', error)
+        // console.error('Erro ao copiar o link:', error)
         this.$toast.error('Falha ao copiar o link.')
       }
     },
@@ -1001,11 +1016,11 @@ export default {
             await this.fetchUserEmblems()
           }
         } else {
-          alert('Por favor, instale uma carteira Ethereum como o MetaMask.')
-          console.error('Ethereum provider not found')
+          this.$toast.error('Por favor, instale uma carteira Ethereum como o MetaMask.')
+          // console.error('Ethereum provider not found')
         }
       } catch (error) {
-        console.error('Erro ao inicializar:', error)
+        // console.error('Erro ao inicializar:', error)
         this.loadingStats = false
       }
     },
@@ -1022,7 +1037,7 @@ export default {
         this.aidRequestPeriodSeg = aidRequestPeriod.toNumber();
 
       } catch (error) {
-        console.error('Erro ao buscar os períodos do contrato:', error);
+        // console.error('Erro ao buscar os períodos do contrato:', error);
       }
     },
     async fetchStatistics() {
@@ -1034,18 +1049,19 @@ export default {
           { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
           { label: 'Renovações Concluídas', value: data._totalRenewals?.toNumber() || 0 },
           { label: 'Valor Total em Renovações (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)).toFixed(2)}` },
-          // { label: 'Tamanho da Fila', value: data._queueSize?.toNumber() || 0 },
+          { label: 'Tamanho da Fila', value: data._queueSize?.toNumber() || 0 },
           { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
           { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
           { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
           { label: 'Contribuições Totais (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalDonated || 0, 18)).toFixed(2)}` },
           { label: 'Bonificações Pagas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18)).toFixed(2)}` },
-          { label: 'Enviado para Gestão Financeira (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18)).toFixed(2)}` },
+          { label: 'Enviado para Gestão Financeira (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalSentToAdminWallet || 0, 18)).toFixed(2)}` },
+          { label: 'Valor Direcionado Para a Liquidez de INVT (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18)).toFixed(2)}` },
           { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
           { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
         ];
       } catch (error) {
-        console.error('Erro ao obter estatísticas:', error.message);
+        // console.error('Erro ao obter estatísticas:', error.message);
       } finally {
         this.loadingStats = false;
       }
@@ -1125,7 +1141,7 @@ export default {
           this.purchaseMessage = 'Transação cancelada pelo usuário.'
           this.$toast.error(this.purchaseMessage)
         } else {
-          console.error('Erro ao comprar emblema:', error)
+          // console.error('Erro ao comprar emblema:', error)
           this.purchaseStatus = 'error'
           this.purchaseMessage = 'Ocorreu um erro ao comprar o emblema.'
           this.$toast.error(this.purchaseMessage)
@@ -1150,7 +1166,7 @@ export default {
         const emblems = await this.contract.getUserEmblems(this.userAddress)
         this.userEmblems = emblems
       } catch (error) {
-        console.error('Erro ao buscar emblemas do usuário:', error)
+        // console.error('Erro ao buscar emblemas do usuário:', error)
       }
     },
 
@@ -1163,7 +1179,7 @@ export default {
         this.$toast.success('Compromisso realizado com sucesso.')
         await this.refreshAllSections();
       } catch (error) {
-        console.error('Erro ao fazer compromisso:', error)
+        // console.error('Erro ao fazer compromisso:', error)
         this.$toast.error('Falha ao realizar compromisso.')
       } finally {
         this.isProcessing = false
@@ -1179,7 +1195,7 @@ export default {
         this.$toast.success('Pedido de ajuda realizado com sucesso.')
         await this.refreshAllSections();
       } catch (error) {
-        console.error('Erro ao pedir ajuda:', error)
+        // console.error('Erro ao pedir ajuda:', error)
         this.$toast.error('Falha ao solicitar ajuda.')
       } finally {
         this.isProcessing = false
@@ -1195,7 +1211,7 @@ export default {
         this.$toast.success('Emblema renovado com sucesso.')
         await this.refreshAllSections();
       } catch (error) {
-        console.error('Erro ao renovar emblema:', error)
+        // console.error('Erro ao renovar emblema:', error)
         this.$toast.error('Falha ao renovar o emblema.')
       } finally {
         this.isProcessing = false
@@ -1208,7 +1224,7 @@ export default {
         // Converte de Wei para USDT e formata para duas casas decimais
         return parseFloat(ethers.utils.formatUnits(totalEarned, 18)).toFixed(2);
       } catch (error) {
-        console.error("Erro ao formatar o ganho total:", error);
+        // console.error("Erro ao formatar o ganho total:", error);
         return "0.00"; // Retorna um valor padrão em caso de erro
       }
     },
@@ -1272,7 +1288,7 @@ export default {
           this.queue = [];
         }
       } catch (error) {
-        console.error('Erro ao buscar dados da fila:', error);
+        // console.error('Erro ao buscar dados da fila:', error);
       }
     },
     // Formata o tempo restante para exibição no formato "Xh Ym"
@@ -1312,13 +1328,18 @@ export default {
 
       try {
         const referrals = await this.contract.getReferralDetails(this.userAddress);
+
+        // Mapear os afiliados corretamente
         this.affiliates = referrals.map((referral) => ({
-          referredAddress: referral.referredAddress,
-          joinDate: referral.joinDate.toNumber(),
-          bonusReceived: referral.bonusReceived,
+          referredAddress: referral[0], // Endereço do afiliado
+          joinDate: referral[1] ? referral[1].toNumber() : 0, // Converter BigNumber para número
+          bonusReceived: referral[2] && ethers?.utils?.formatUnits
+            ? parseFloat(ethers.utils.formatUnits(referral[2], 18)).toFixed(2)
+            : '0.00',
         }));
+
       } catch (error) {
-        console.error("Erro ao buscar afiliados:", error);
+        // console.error("Erro ao buscar afiliados:", error);
         this.$toast.error("Falha ao carregar os dados de afiliados.");
       }
     },
@@ -1331,7 +1352,7 @@ export default {
     },
     // Redireciona para o gráfico de preço do token Invistech
     viewPriceChart() {
-      this.showPriceChartModal = true;
+      window.open('https://dexscreener.com/bsc/0xcebb17c174195d99a1d121e8186bd3a5ab6911e0', '_blank');
     },
   },
 }

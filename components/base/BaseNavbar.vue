@@ -9,6 +9,9 @@
         <ul class="hidden lg:flex lg:space-x-6">
           <NavLink name="Início" url="#hero" />
           <NavLink name="Fila" url="#help-queue" />
+          <NavLink name="Participar" url="#purchase-emblem" />
+          <NavLink name="Token" url="#token-partnership" />
+          <NavLink name="Bônus" url="#referral-bonus" />
           <NavLink name="Estatísticas" url="#community-stats" />
           <NavLink name="Segurança" url="#security" />
           <NavLink name="FAQ" url="#faq" />
@@ -22,11 +25,8 @@
         </button>
         <!-- Informações de conexão para telas grandes -->
         <div class="hidden lg:flex items-center space-x-3">
-          <button
-            v-if="!isConnected"
-            class="px-4 py-2 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white rounded-lg"
-            @click="connectWallet"
-          >
+          <button v-if="!isConnected"
+            class="px-4 py-2 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white rounded-lg" @click="connectWallet">
             Conectar Carteira
           </button>
           <div v-else class="flex items-center space-x-2">
@@ -44,17 +44,17 @@
       <ul class="flex flex-col space-y-3">
         <NavLink name="Início" url="#hero" />
         <NavLink name="Fila" url="#help-queue" />
+        <NavLink name="Participar" url="#purchase-emblem" />
+        <NavLink name="Token" url="#token-partnership" />
+        <NavLink name="Bônus" url="#referral-bonus" />
         <NavLink name="Estatísticas" url="#community-stats" />
         <NavLink name="Segurança" url="#security" />
         <NavLink name="FAQ" url="#faq" />
-        <NavLink name="Contato" url="#contact" />
         <!-- Informações de conexão para dispositivos móveis -->
         <li class="flex flex-col space-y-2 mt-4">
-          <button
-            v-if="!isConnected"
+          <button v-if="!isConnected"
             class="w-full px-6 py-2 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white rounded-lg"
-            @click="connectWallet"
-          >
+            @click="connectWallet">
             Conectar Carteira
           </button>
           <div v-else class="flex flex-col space-y-2 items-center">
@@ -257,6 +257,7 @@ export default {
   .flex.items-center.space-x-4 {
     padding: 0.5rem;
   }
+
   .lg\:hidden {
     padding: 1rem 0;
   }

@@ -1,10 +1,17 @@
 export default {
+  // Alvo e modo SSR habilitados
+  target: 'server',
+  ssr: true,
+
+  // Configuração do servidor
   server: {
-    host: '0.0.0.0',
-    port: 3000
+    host: '0.0.0.0', // Permite acesso externo
+    port: 3000, // Porta padrão
   },
+
+  // Configurações de meta tags e cabeçalhos
   head: {
-    title: 'InvisTribe',
+    title: 'InvisTribe - Your Path To Passive Income',
     htmlAttrs: {
       lang: 'en',
     },
@@ -22,20 +29,56 @@ export default {
       },
     ],
   },
+
+  // CSS global e de terceiros
   css: ['@/assets/css/main.css', 'aos/dist/aos.css'],
-  plugins: ['~/plugins/smooth-scroll.js', '~/plugins/mdi.js', '~/plugins/toast.client.js', '~/plugins/vue-scrollto.js'],
+
+  // Plugins para carregar antes de montar o aplicativo
+  plugins: [
+    '~/plugins/smooth-scroll.js',
+    '~/plugins/mdi.js',
+    '~/plugins/toast.client.js',
+    '~/plugins/vue-scrollto.js',
+  ],
+
+  // Diretório de componentes (autoimportação)
   components: true,
-  buildModules: ['@nuxtjs/eslint-module', '@nuxt/postcss8', '@nuxtjs/composition-api/module'],
+
+  // Módulos de build (desenvolvimento)
+  buildModules: [
+    '@nuxtjs/eslint-module', // ESLint
+    '@nuxt/postcss8', // PostCSS 8
+    '@nuxtjs/composition-api/module', // API de composição do Vue 3
+  ],
+
+  // Módulos padrão (pode adicionar outros se necessário)
   modules: [],
+
+  // Configuração de build e PostCSS
   build: {
     postcss: {
       plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
+        tailwindcss: {}, // Configuração do Tailwind CSS
+        autoprefixer: {}, // Configuração do Autoprefixer
       },
     },
+    // Configuração adicional para lidar com arquivos `.psd` (caso precise manter)
+    extend(config, { isDev, isClient }) {
+      config.module.rules.push({
+        test: /\.psd$/,
+        use: 'ignore-loader', // Ignora arquivos `.psd` durante o build
+      });
+    },
   },
-  /**
-  buildDir: 'nuxt-dist',
-   */
-}
+
+  // Configuração de fallback para rotas inexistentes
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'not-found',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue'), // Página personalizada para 404
+      });
+    },
+  },
+};
