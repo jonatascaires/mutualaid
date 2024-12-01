@@ -697,13 +697,13 @@ export default {
 
       // Dados para Compra de Emblema
       selectedLevel: 1, // Nível inicial do emblema
-      emblemBaseCost: 25, // Custo base por nível em USDT
+      emblemBaseCost: 30, // Custo base por nível em USDT
       commitmentBaseCost: 5, // Custo base do compromisso em USDT por nível
-      renewalMultiplier: 14.4, // Custo de renovação = nível * renewalMultiplier USDT
-      rewardMultiplier: 10.5, // Multiplicador para estimativa de recompensa
-      commitmentPeriodDays: 5, // Período de compromisso em dias
-      renewalPeriodDays: 114, // Período de renovação em dias
-      aidRequestPeriodDays: 6, // Período para solicitar ajuda em dias
+      renewalMultiplier: 30, // Custo de renovação = nível * renewalMultiplier USDT
+      rewardMultiplier: 13, // Multiplicador para estimativa de recompensa
+      commitmentPeriodDays: 6, // Período de compromisso em dias
+      renewalPeriodDays: 150, // Período de renovação em dias
+      aidRequestPeriodDays: 7, // Período para solicitar ajuda em dias
       showDetails: false, // Controla a exibição dos detalhes
       uplineAddress: '', // Endereço do referenciador (propriedade adicionada)
 
