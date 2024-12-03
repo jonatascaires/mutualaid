@@ -468,7 +468,7 @@
         @click.self="showModal = false">
         <!-- Modal Header -->
         <div class="sticky top-0 bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-xl font-bold">Meus Emblemas</h2>
+          <h2 class="text-xl font-bold">Meus Emblemas1</h2>
           <button class="text-white hover:text-gray-200 focus:outline-none" @click="showModal = false">✕</button>
         </div>
 
@@ -489,7 +489,7 @@
           <div v-else>
             <BaseSection>
               <div v-for="(emblem, index) in userEmblems" :key="emblem.id"
-                class="col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-xl text-center transform hover:scale-105 mt-4"
+                class="col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-xl text-center mt-4"
                 data-aos="fade-up" :data-aos-delay="100 * index">
                 <div class="flex flex-col items-center mb-4">
                   <h3 class="text-2xl font-semibold text-gray-800 mb-2">Emblema Nível {{ emblem.level }}</h3>
