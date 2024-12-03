@@ -523,7 +523,7 @@
 
                 <!-- Contador e barra de progresso para solicitação de ajuda -->
                 <div class="mb-2 mt-4">
-                  <p class="text-gray-700">Solicitação de Recompensa: {{ formatTimeRemaining(emblem, 'aid') }}</p>
+                  <p class="text-gray-700">Recompensa: {{ formatTimeRemaining(emblem, 'aid') }}</p>
                   <div class="w-full bg-gray-200 rounded-full h-2.5">
                     <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: emblem.aidProgress + '%' }"></div>
                   </div>
@@ -532,7 +532,7 @@
                   class="w-full px-4 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
                   :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'aid') || isProcessing }"
                   :disabled="!isActionEnabled(emblem, 'aid') || isProcessing" @click="requestAid(emblem.id)">
-                  <span v-if="!isProcessing">Pedir Ajuda (Estimativa: {{ formatAidRequestReward(emblem.level) }}
+                  <span v-if="!isProcessing">Recompensa (Estimativa: {{ formatAidRequestReward(emblem.level) }}
                     USDT)</span>
                   <span v-else>Processando...</span>
                 </BaseButton>
