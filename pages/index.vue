@@ -352,23 +352,63 @@
             Impulsione o Crescimento com Nosso <span class="text-header-gradient">Bônus de Indicação</span>
           </h2>
           <p class="paragraph">
-            Convide amigos para se juntar à nossa comunidade e ganhe um bônus de 5% sobre todas as compras de emblemas,
-            tarefas e renovações que eles realizarem. É uma maneira simples de aumentar seus ganhos enquanto fortalece a
-            comunidade.
+            Convide amigos para se juntar à nossa comunidade e ganhe bônus sobre as compras, tarefas e renovações
+            realizadas por eles, até o 10º nível de indicação.
           </p>
           <ul class="space-y-4 sm:space-y-2">
-            <LandingListItem title="Receba 5% de Bônus por Cada Indicação" />
-            <LandingListItem title="Bônus Aplicado em Compras, Tarefas e Renovações dos Indicados" />
-            <LandingListItem title="Amplie Seus Ganhos e Ajude a Comunidade a Crescer" />
+            <LandingListItem title="Receba bônus direto de 10% no primeiro nível" />
+            <LandingListItem title="Receba 1% de bônus por cada nível adicional (até o 10° nível)" />
+            <LandingListItem title="Construa sua rede e aumente seus ganhos a longo prazo" />
           </ul>
 
           <button class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
-            @click="openAffiliatesModal">
-            Ver Afiliados
+            @click="openFullReferralTreeModal">
+            Ver Rede Completa de Indicações
           </button>
         </div>
       </BaseSection>
     </section>
+
+    <!-- Modal da Árvore Completa de Indicações -->
+    <div v-if="showFullReferralTreeModal"
+      class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
+        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+          <h2 class="text-lg font-semibold">Endereços que Garantem seu Bônus</h2>
+          <button @click="showFullReferralTreeModal = false" class="text-white hover:text-gray-300">
+            ✕
+          </button>
+        </div>
+        <div class="p-6 overflow-auto max-h-[70vh]">
+
+          <!-- Caso não haja referências -->
+          <div v-if="fullReferralTree.length === 0" class="text-center">
+            <p class="text-gray-600 text-lg font-semibold">Você ainda não possui indicações cadastradas. 🙁</p>
+          </div>
+
+          <div v-else>
+            <table class="w-full text-left border-collapse border border-gray-300">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="px-4 py-2 border border-gray-300">Endereço</th>
+                  <th class="px-4 py-2 border border-gray-300">Data de Adesão</th>
+                  <!-- <th class="px-4 py-2 border border-gray-300">Bônus Recebido (USDT)</th>
+                  <th class="px-4 py-2 border border-gray-300">Nível</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(ref, index) in fullReferralTree" :key="index">
+                  <td class="text-center">{{ formatAddress(ref.referredAddress) }}</td>
+                  <td class="text-center">{{ new Date(ref.joinDate * 1000).toLocaleDateString('pt-BR') }}</td>
+                  <!-- <td class="text-center">{{ ref.bonusReceived }} USDT</td>
+                  <td class="text-center">{{ ref.level }}</td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Seção de Link de Convite -->
     <section id="invite-link" class="w-full my-24">
@@ -578,38 +618,6 @@
       </BaseSection>
     </section>
 
-    <!-- Modal de Afiliados -->
-    <div v-if="showAffiliatesModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
-        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-lg font-semibold">Minha Rede de Afiliados</h2>
-          <button @click="showAffiliatesModal = false" class="text-white hover:text-gray-300">
-            ✕
-          </button>
-        </div>
-        <div class="p-6 overflow-auto max-h-[70vh]">
-          <table class="w-full text-left border-collapse border border-gray-300">
-            <thead>
-              <tr class="bg-gray-100">
-                <th class="px-4 py-2 border border-gray-300">Endereço</th>
-                <th class="px-4 py-2 border border-gray-300">Data de Adesão</th>
-                <th class="px-4 py-2 border border-gray-300">Bônus Recebido (USDT)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(affiliate, index) in affiliates" :key="affiliate.referredAddress || index">
-                <td class="text-center">{{ formatAddress(affiliate.referredAddress) }}</td>
-                <td class="text-center">{{ new Date(affiliate.joinDate * 1000).toLocaleDateString() }}</td>
-                <td class="text-center">{{ affiliate.bonusReceived }} USDT</td>
-              </tr>
-            </tbody>
-          </table>
-          <p v-if="affiliates.length === 0" class="text-center text-gray-600 mt-4">Você ainda não tem afiliados
-            cadastrados. 🙁</p>
-        </div>
-      </div>
-    </div>
-
     <div class="w-full my-10 flex justify-center">
       <a v-smooth-scroll data-aos="flip-down" data-aos-delay="150" href="#navbar"
         class="px-6 py-3 flex items-center space-x-2 bg-[#FAFAFA] hover:bg-gray-100 hover:shadow-md border border-[#DDDDDD] rounded-md text-gray-700">
@@ -642,7 +650,7 @@ export default {
       isContractModalVisible: false,
       provider: null,
       contract: null,
-      contractAddress: '0x4460081014F07649102828A3da9320cd5cFB8fA7',
+      contractAddress: '0x9cC5a6dA4eA24f5ddD89Db1ACca9792De3D8BCE7',
       loadingStats: true,
       userAddress: null,
       inviteLink: '',
@@ -717,6 +725,9 @@ export default {
       isPurchasing: false,
       purchaseStatus: '', // 'success' ou 'error'
       purchaseMessage: '',
+
+      showFullReferralTreeModal: false,
+      fullReferralTree: [],
     }
   },
   computed: {
@@ -746,11 +757,55 @@ export default {
   },
   mounted() {
     this.initialize()
-    this.startProgressUpdater();
-    this.startQueueUpdater();
-    this.fetchQueueData();
+      .then(() => {
+        // Inicia atualizações constantes (progressos, fila, etc.)
+        this.startProgressUpdater();
+        this.startQueueUpdater();
+        this.fetchQueueData();
+
+        // Atualiza todas as seções a cada 30 segundos
+        this.updateInterval = setInterval(() => {
+          this.refreshAllSections();
+        }, 60000);
+      })
+      .catch(error => {
+        // Trate erros de inicialização se necessário
+        // console.error("Erro na inicialização:", error);
+      });
+  },
+  beforeDestroy() {
+    // Para atualizações já existentes
+    this.stopProgressUpdater();
+    this.stopQueueUpdater();
+
+    // Limpa o interval de atualização a cada 30s
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
   },
   methods: {
+    async ensureUsdtApproval(requiredAmount) {
+      if (!this.provider || !this.contract) return
+
+      const signer = this.provider.getSigner()
+      const usdtAddress = await this.contract.usdtToken()
+      const usdtContract = new ethers.Contract(usdtAddress, IERC20ABI, signer)
+
+      const userAddress = await signer.getAddress()
+      const usdtBalance = await usdtContract.balanceOf(userAddress)
+      const required = ethers.utils.parseUnits(requiredAmount.toString(), 18)
+
+      if (usdtBalance.lt(required)) {
+        throw new Error('Saldo insuficiente de USDT.')
+      }
+
+      const allowance = await usdtContract.allowance(userAddress, this.contractAddress)
+      if (allowance.lt(required)) {
+        // Se não houver aprovação suficiente, solicite aprovação
+        const approveTx = await usdtContract.approve(this.contractAddress, ethers.constants.MaxUint256)
+        await approveTx.wait()
+      }
+    },
     showContractModal() {
       this.isContractModalVisible = true;
     },
@@ -1048,7 +1103,6 @@ export default {
           { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
           { label: 'Renovações Concluídas', value: data._totalRenewals?.toNumber() || 0 },
           { label: 'Valor Total em Renovações (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)).toFixed(2)}` },
-          { label: 'Tamanho da Fila', value: data._queueSize?.toNumber() || 0 },
           { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
           { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
           { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
@@ -1173,10 +1227,21 @@ export default {
     async makeCommitment(emblemId) {
       this.isProcessing = true
       try {
+        // Calcular o custo do compromisso baseado no nível do emblema
+        // Você pode obter o nível do emblema do array userEmblems
+        const emblem = this.userEmblems.find(e => e.id === emblemId)
+        const level = emblem.level.toNumber()
+        const commitmentCost = level * this.commitmentBaseCost
+
+        // Verificar e aprovar USDT
+        await this.ensureUsdtApproval(commitmentCost)
+
+        // Agora que está aprovado, chame a função do contrato principal
         const tx = await this.contract.makeCommitment(emblemId)
         await tx.wait()
+
         this.$toast.success('Compromisso realizado com sucesso.')
-        await this.refreshAllSections();
+        await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao fazer compromisso:', error)
         this.$toast.error('Falha ao realizar compromisso.')
@@ -1189,10 +1254,20 @@ export default {
     async requestAid(emblemId) {
       this.isProcessing = true
       try {
+        // Cálculo da recompensa não necessita de aprovação, pois não é pagamento do usuário,
+        // mas você pode querer garantir aprovações para cobrir taxas de gas ou algo mais,
+        // caso o contrato exija algum custo em USDT (verifique seu contrato).
+        // Se não houver custo, você pode pular a parte de approval.
+        //
+        // Caso não haja custo de USDT, pule a ensureUsdtApproval.
+        // Se houver algum custo, adicione a linha:
+        // await this.ensureUsdtApproval(valorNecessario)
+
         const tx = await this.contract.requestAid(emblemId)
         await tx.wait()
+
         this.$toast.success('Pedido de ajuda realizado com sucesso.')
-        await this.refreshAllSections();
+        await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao pedir ajuda:', error)
         this.$toast.error('Falha ao solicitar ajuda.')
@@ -1205,10 +1280,19 @@ export default {
     async renewEmblem(emblemId) {
       this.isProcessing = true
       try {
+        // Calcular o custo da renovação baseado no nível do emblema
+        const emblem = this.userEmblems.find(e => e.id === emblemId)
+        const level = emblem.level.toNumber()
+        const renewalCost = level * this.renewalMultiplier
+
+        // Verificar e aprovar USDT
+        await this.ensureUsdtApproval(renewalCost)
+
         const tx = await this.contract.renewEmblem(emblemId)
         await tx.wait()
+
         this.$toast.success('Emblema renovado com sucesso.')
-        await this.refreshAllSections();
+        await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao renovar emblema:', error)
         this.$toast.error('Falha ao renovar o emblema.')
@@ -1322,29 +1406,41 @@ export default {
     formatAidRequestReward(level) {
       return (level * this.rewardMultiplier).toFixed(2); // Estimativa de recompensa de ajuda
     },
-    async fetchAffiliates() {
+    async fetchFullReferralTree() {
       if (!this.contract || !this.userAddress) return;
 
       try {
-        const referrals = await this.contract.getReferralDetails(this.userAddress);
+        // Chama a função do contrato para obter toda a rede
+        const tree = await this.contract.getFullReferralTree(this.userAddress);
 
-        // Mapear os afiliados corretamente
-        this.affiliates = referrals.map((referral) => ({
-          referredAddress: referral[0], // Endereço do afiliado
-          joinDate: referral[1] ? referral[1].toNumber() : 0, // Converter BigNumber para número
-          bonusReceived: referral[2] && ethers?.utils?.formatUnits
-            ? parseFloat(ethers.utils.formatUnits(referral[2], 18)).toFixed(2)
-            : '0.00',
-        }));
+        const seenAddresses = new Set();
 
+        // Processa os dados para corrigir os níveis e remover duplicados
+        this.fullReferralTree = tree
+          .map((ref) => ({
+            referredAddress: ref.referredAddress,
+            joinDate: ref.joinDate.toNumber(),
+            bonusReceived: ethers.utils.formatUnits(ref.bonusReceived.toString(), 18), // Converte o valor
+            level: ref.level, // Este nível já deve vir correto do contrato
+          }))
+          .filter((ref) => {
+            if (seenAddresses.has(ref.referredAddress)) {
+              return false; // Ignorar endereços duplicados
+            }
+            seenAddresses.add(ref.referredAddress); // Adicionar ao conjunto de endereços vistos
+            return true; // Incluir no resultado final
+          });
+
+        // Ordena os dados pelo nível (caso necessário)
+        this.fullReferralTree.sort((a, b) => a.level - b.level);
       } catch (error) {
-        // console.error("Erro ao buscar afiliados:", error);
-        this.$toast.error("Falha ao carregar os dados de afiliados.");
+        this.$toast.error("Falha ao carregar a rede completa de indicações.");
       }
     },
-    openAffiliatesModal() {
-      this.fetchAffiliates();
-      this.showAffiliatesModal = true;
+    openFullReferralTreeModal() {
+      // Antes de abrir o modal, buscarmos a árvore completa
+      this.fetchFullReferralTree();
+      this.showFullReferralTreeModal = true;
     },
     navigateToBuyInvistech() {
       window.open('https://pancakeswap.finance/?outputCurrency=0xAA217F7BAb90100419b99c027adCf5F0A005C192', '_blank');
@@ -1352,6 +1448,11 @@ export default {
     // Redireciona para o gráfico de preço do token Invistech
     viewPriceChart() {
       window.open('https://dexscreener.com/bsc/0xcebb17c174195d99a1d121e8186bd3a5ab6911e0', '_blank');
+    },
+    formatBonus(bonus) {
+      // Converte de Wei (10^18) para USDT, assumindo que bonusReceived veio em wei:
+      const formatedValue = parseFloat(ethers.utils.formatUnits(bonus.toString(), 18)).toFixed(2);
+      return formatedValue;
     },
   },
 }
