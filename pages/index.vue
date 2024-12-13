@@ -4,30 +4,29 @@
     <section id="hero" class="w-full pb-24">
       <BaseSection>
         <div class="col-span-12 lg:col-span-6 mt-12 xl:mt-10 space-y-4 sm:space-y-6 px-6 text-center sm:text-left">
-          <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">Bem-vindo ao
-            InvisTribe</span>
+          <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">{{ $t(`Bem-vindo ao
+            InvisTribe`) }}</span>
           <h1 data-aos="fade-right"
             class="text-[2.5rem] sm:text-5xl xl:text-6xl font-bold leading-tight capitalize sm:pr-8 xl:pr-10">
-            Unindo Pessoas em uma <span class="text-header-gradient">Comunidade de Renda Passiva</span>
+            {{ $t(`Unindo Pessoas em uma`) }} <span class="text-header-gradient">{{ $t(`Comunidade de Renda Passiva`)
+              }}</span>
           </h1>
           <p data-aos="fade-down" data-aos-delay="300" class="paragraph hidden sm:block">
-            Bem-vindo ao nosso inovador sistema de renda passiva, onde os participantes podem ganhar recompensas
-            financeiras
-            realizando tarefas de forma transparente e sustentável. Gerenciado por um contrato inteligente na
-            blockchain,
-            garantimos segurança, transparência e imutabilidade das operações.
+            {{ $t(`Bem-vindo ao nosso inovador sistema de renda passiva, onde os participantes podem ganhar recompensas
+            financeiras realizando tarefas de forma transparente e sustentável. Gerenciado por um contrato inteligente
+            na blockchain, garantimos segurança, transparência e imutabilidade das operações.`) }}
           </p>
           <div data-aos="fade-up" data-aos-delay="500"
             class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-2">
             <BaseButton
               class="max-w-full px-8 py-4 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] border border-[#0c66ee] text-white"
               @click="$scrollTo('#purchase-emblem')">
-              Começar Agora
+              {{ $t(`Começar Agora`) }}
             </BaseButton>
             <!-- <BaseButton
               class="max-w-full px-6 py-4 bg-inherit text-gradient border border-[#0c66ee] flex items-center justify-center"
               @click="$scrollTo('#about')">
-              <span>Saiba Mais</span>
+              <span>{{ $t('Saiba Mais') }}</span>
               <ChevronDownIcon :size="20" class="mt-1 text-[#0c66ee]" />
             </BaseButton> -->
           </div>
@@ -36,7 +35,7 @@
         <div class="hidden sm:block col-span-12 lg:col-span-6">
           <div class="w-full">
             <img data-aos="fade-up" :src="require('~/assets/img/hero-image.webp')" class="-mt-4"
-              alt="Comunidade de Renda Passiva" />
+              :alt="$t('Comunidade de Renda Passiva')" />
           </div>
         </div>
       </BaseSection>
@@ -47,18 +46,18 @@
       class="max-w-screen-xl mt-10 mx-2 sm:mx-auto px-4 sm:px-6 lg:px-8 py-12 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg transform lg:-translate-y-12 relative">
       <div v-if="isUpdating" class="text-center my-6">
         <div class="spinner"></div>
-        <p class="text-gray-600">Atualizando...</p>
+        <p class="text-gray-600">{{ $t('Atualizando...') }}</p>
       </div>
       <div class="w-full text-center mb-12">
-        <h2 class="text-4xl font-semibold text-gray-800">📜 Fila de Renda Passiva</h2>
-        <p class="text-gray-600 mt-4 text-lg">Visualize as próximas oportunidades de ganho no sistema.</p>
+        <h2 class="text-4xl font-semibold text-gray-800">📜 {{ $t('Fila de Renda Passiva') }}</h2>
+        <p class="text-gray-600 mt-4 text-lg">{{ $t('Visualize as próximas oportunidades de ganho no sistema.') }}</p>
       </div>
 
       <!-- Cards com contagem regressiva e detalhes -->
       <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
         <div v-if="queue.length === 0" class="col-span-1 sm:col-span-2 lg:col-span-3 text-center">
-          <p class="text-gray-600 text-lg font-semibold">A fila está vazia no momento. 🚀</p>
-          <p class="text-gray-500">Volte mais tarde para verificar novas oportunidades de ganho.</p>
+          <p class="text-gray-600 text-lg font-semibold">{{ $t('A fila está vazia no momento.') }} 🚀</p>
+          <p class="text-gray-500">{{ $t('Volte mais tarde para verificar novas oportunidades de ganho.') }}</p>
         </div>
         <div v-else v-for="(request, index) in queue" :key="index"
           class="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" data-aos="fade-up"
@@ -66,7 +65,8 @@
           <div class="flex items-center space-x-4 mb-4">
             <div class="text-2xl font-bold text-blue-600">#{{ index + 1 }}</div>
             <div class="flex-1">
-              <h3 class="text-xl font-semibold text-gray-800">Usuário: {{ compactAddress(request.user) }}</h3>
+              <h3 class="text-xl font-semibold text-gray-800">{{ $t('Usuário:') }} {{ compactAddress(request.user) }}
+              </h3>
             </div>
             <div>
               <span class="px-2 py-1 text-sm font-semibold rounded-full" :class="{
@@ -82,25 +82,26 @@
             <div class="flex items-center">
               <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
-                Ganho Total: <span class="font-semibold text-green-500">{{ request.totalAidAmount }} USDT</span>
+                {{ $t('Ganho Total:') }} <span class="font-semibold text-green-500">{{ request.totalAidAmount }}
+                  USDT</span>
               </p>
             </div>
             <div class="flex items-center">
               <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
-                Recebido: <span class="font-semibold text-blue-500">{{ request.receivedAmount }} USDT</span>
+                {{ $t('Recebido:') }} <span class="font-semibold text-blue-500">{{ request.receivedAmount }} USDT</span>
               </p>
             </div>
             <div class="flex items-center">
               <CurrencyUsdIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
-                Restante: <span class="font-semibold text-red-500">{{ request.remainingAid }} USDT</span>
+                {{ $t('Restante:') }} <span class="font-semibold text-red-500">{{ request.remainingAid }} USDT</span>
               </p>
             </div>
             <div class="flex items-center">
               <ClockIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
-                Tempo Restante: {{ formatTime(request.timeRemaining) }}
+                {{ $t('Tempo Restante:') }} {{ formatTime(request.timeRemaining) }}
               </p>
             </div>
             <!-- Barra de progresso -->
@@ -133,56 +134,64 @@
       <BaseSection>
         <LandingBuyTradeImage class="sm:hidden mb-8" />
         <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
-          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">Adquira seu Emblema e Comece a Ganhar</h2>
+          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">{{ $t('Adquira seu Emblema e Comece a Ganhar') }}</h2>
           <p class="paragraph">
-            Para ingressar na comunidade, adquira um emblema que representa seu nível de compromisso. Escolha o
-            nível que melhor se adapta a você e comece a gerar renda passiva realizando tarefas.
+            {{ $t(`Para ingressar na comunidade, adquira um emblema que representa seu nível de compromisso. Escolha o
+            nível que melhor se adapta a você e comece a gerar renda passiva realizando tarefas.`) }}
           </p>
 
           <div class="space-y-6 lg:pr-12">
             <!-- Campo de seleção de nível do emblema -->
             <div>
-              <label for="level" class="block text-gray-700 font-semibold mb-2">Selecione o Nível do Emblema (1 a
-                50)</label>
+              <label for="level" class="block text-gray-700 font-semibold mb-2">{{ $t(`Selecione o Nível do Emblema (1 a
+                50)`) }}</label>
               <input id="level" v-model.number="selectedLevel" type="number" min="1" max="50"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Digite um nível de 1 a 50" />
+                :placeholder="$t('Digite um nível de 1 a 50')" />
             </div>
 
             <!-- Exibição do valor em USDT -->
             <div>
-              <label class="block text-gray-700 font-semibold mb-2">Valor do Emblema (USDT)</label>
+              <label class="block text-gray-700 font-semibold mb-2">{{ $t('Valor do Emblema (USDT)') }}</label>
               <p class="text-xl font-bold text-gray-800">{{ emblemCostInUSDT }} USDT</p>
             </div>
 
             <!-- Informações adicionais, exibidas apenas após a primeira interação -->
             <div v-if="showDetails" class="bg-gray-100 p-4 rounded-lg">
-              <h3 class="text-lg font-semibold text-gray-700 mb-2">Detalhes do Emblema</h3>
+              <h3 class="text-lg font-semibold text-gray-700 mb-2">{{ $t('Detalhes do Emblema') }}</h3>
 
               <!-- Custo e frequência do compromisso -->
               <p class="text-gray-600">
-                <span class="font-semibold text-blue-600">Tarefas Requeridas:</span> {{ commitmentCost }} USDT a
-                cada {{ commitmentPeriodDays }} dias
+                <span class="font-semibold text-blue-600">{{ $t('Tarefas Requeridas:') }}</span> {{ commitmentCost }} {{
+                  $t('USDT a cada') }} {{ commitmentPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Custo e frequência da renovação -->
               <p class="text-gray-600 mt-2">
-                <span class="font-semibold text-purple-600">Renovação do Emblema:</span> {{ renewalCost }} USDT a cada
-                {{ renewalPeriodDays }} dias
+                <span class="font-semibold text-purple-600">{{ $t('Renovação do Emblema:') }}</span> {{ renewalCost }}
+                {{ $t('USDT a cada') }} {{ renewalPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Recompensa estimada -->
               <p class="text-gray-600 mt-2">
-                <span class="font-semibold text-green-600">Renda Estimada:</span> {{ estimatedReward }} USDT
-                disponível a cada {{ aidRequestPeriodDays }} dias
+                <span class="font-semibold text-green-600">{{ $t('Renda Estimada:') }}</span> {{ estimatedReward }} {{
+                  $t('USDT disponível a cada') }} {{ aidRequestPeriodDays }} {{ $t('dias') }}
+              </p>
+
+              <!-- Mostrar o Upline -->
+              <p v-if="uplineAddress" class="text-gray-600 mt-2">
+                <span class="font-semibold text-yellow-600">{{ $t('Endereço do Upline:') }}</span> {{ uplineAddress }}
+              </p>
+              <p v-else class="text-red-600 mt-2">
+                {{ $t('Você não possui um upline configurado. Por favor, use um link de convite para continuar.') }}
               </p>
             </div>
 
             <!-- Botão de compra que muda para "Confirmar" após o clique -->
             <BaseButton class="w-full px-5 py-4 bg-blue-gradient text-white text-base font-medium mt-6"
               :disabled="isPurchasing" @click="handlePurchase">
-              <span v-if="!isPurchasing">{{ buttonLabel }}</span>
-              <span v-else>Processando...</span>
+              <span v-if="!isPurchasing">{{ $t(buttonLabel) }}</span>
+              <span v-else>{{ $t('Processando...') }}</span>
             </BaseButton>
 
             <!-- Mensagem de sucesso ou erro -->
@@ -190,7 +199,7 @@
               'text-green-600': purchaseStatus === 'success',
               'text-red-600': purchaseStatus === 'error',
             }" class="mt-4 text-center">
-              {{ purchaseMessage }}
+              {{ $t(purchaseMessage) }}
             </div>
           </div>
         </div>
@@ -203,25 +212,24 @@
       <BaseSection>
         <div class="col-span-12 mt-4 xl:mt-20 space-y-6 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            Simule Seus <span class="text-header-gradient">Ganhos</span>
+            {{ $t('Simule Seus') }} <span class="text-header-gradient">{{ $t('Ganhos') }}</span>
           </h2>
           <p class="paragraph">
-            Selecione o nível do seu emblema e descubra quanto você pode ganhar ao longo de 1 ano.
+            {{ $t('Selecione o nível do seu emblema e descubra quanto você pode ganhar ao longo de 1 ano.') }}
           </p>
 
           <!-- Campo de seleção de nível do emblema -->
           <div>
-            <label for="level" class="block text-gray-700 font-semibold mb-2">Selecione o Nível do Emblema (1 a
-              50)</label>
+            <label for="level" class="block text-gray-700 font-semibold mb-2">{{ $t('Selecione o Nível do Emblema (1 a 50)') }}</label>
             <input id="level" v-model.number="selectedLevelCalculator" type="number" min="1" max="50"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Digite um nível de 1 a 50" />
+              :placeholder="$t('Digite um nível de 1 a 50')" />
           </div>
 
           <!-- Botão para calcular -->
           <BaseButton class="w-full px-6 py-4 bg-blue-gradient text-white text-base font-medium mt-4"
             @click="calculateSimulation">
-            Calcular
+            {{ $t('Calcular') }}
           </BaseButton>
         </div>
       </BaseSection>
@@ -231,7 +239,7 @@
     <div v-if="showModalCalculator" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
       <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
         <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-lg font-semibold">Resultados da Simulação</h2>
+          <h2 class="text-lg font-semibold">{{ $t('Resultados da Simulação') }}</h2>
           <button @click="showModalCalculator = false" class="text-white hover:text-gray-300">
             ✕
           </button>
@@ -240,10 +248,10 @@
           <table class="w-full text-left border-collapse border border-gray-300">
             <thead>
               <tr class="bg-gray-100">
-                <th class="px-4 py-2 border border-gray-300">Dia</th>
-                <th class="px-4 py-2 border border-gray-300">Descrição</th>
-                <th class="px-4 py-2 border border-gray-300">Transferência (USDT)</th>
-                <th class="px-4 py-2 border border-gray-300">Saldo (USDT)</th>
+                <th class="px-4 py-2 border border-gray-300">{{ $t('Dia') }}</th>
+                <th class="px-4 py-2 border border-gray-300">{{ $t('Descrição') }}</th>
+                <th class="px-4 py-2 border border-gray-300">{{ $t('Transferência (USDT)') }}</th>
+                <th class="px-4 py-2 border border-gray-300">{{ $t('Saldo (USDT)') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -268,75 +276,36 @@
       <BaseSection>
         <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            Parceria Estratégica com o <span class="text-header-gradient">Token Invistech</span>
+            {{ $t('Parceria Estratégica com o') }} <span class="text-header-gradient">{{ $t('Token Invistech') }}</span>
           </h2>
           <p class="paragraph">
-            Estabelecemos uma parceria estratégica com o projeto Invistech, um token de alta liquidez, para garantir a
-            sustentabilidade e eficiência do nosso sistema de renda passiva.
+            {{ $t('Estabelecemos uma parceria estratégica com o projeto Invistech, um token de alta liquidez, para garantir a sustentabilidade e eficiência do nosso sistema de renda passiva.') }}
           </p>
           <ul class="space-y-4 sm:space-y-2">
-            <LandingListItem title="Receba seus ganhos em Tokens Invistech em até 24 horas" />
-            <LandingListItem title="Sistema Eficiente e Otimizado para Máximos Resultados" />
-            <LandingListItem title="Conversão Fácil para USDT ou Outras Criptomoedas" />
+            <LandingListItem :title="$t('Receba seus ganhos em Tokens Invistech em até 24 horas')" />
+            <LandingListItem :title="$t('Sistema Eficiente e Otimizado para Máximos Resultados')" />
+            <LandingListItem :title="$t('Conversão Fácil para USDT ou Outras Criptomoedas')" />
           </ul>
           <!-- Botões adicionados -->
           <div class="flex space-x-4 mt-6">
             <BaseButton class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
               @click="navigateToBuyInvistech">
-              Comprar Tokens Invistech
+              {{ $t('Comprar Tokens Invistech') }}
             </BaseButton>
             <BaseButton class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
               @click="viewPriceChart">
-              Ver Gráfico de Preço
+              {{ $t('Ver Gráfico de Preço') }}
             </BaseButton>
           </div>
         </div>
         <div data-aos="fade-left" class="col-span-12 lg:col-span-6">
           <div class="w-full">
             <img :src="require('~/assets/img/img-sections/token_invistech.png')" class="w-full"
-              alt="Parceria com o Token Invistech" />
+              :alt="$t('Parceria com o Token Invistech')" />
           </div>
         </div>
       </BaseSection>
     </section>
-
-    <!-- Modal para o Gráfico de Preço -->
-    <div v-if="showPriceChartModal"
-      class="modal-price fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-      <div class="w-full h-full bg-white">
-        <!-- Modal Header -->
-        <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-lg font-semibold">Gráfico de Preço - Token Invistech</h2>
-          <button @click="showPriceChartModal = false" class="text-white hover:text-gray-300 text-lg">✕</button>
-        </div>
-        <!-- Modal Content -->
-        <style>
-          #dexscreener-embed {
-            position: relative;
-            width: 100%;
-            padding-bottom: 125%;
-          }
-
-          @media(min-width:1400px) {
-            #dexscreener-embed {
-              padding-bottom: 65%;
-            }
-          }
-
-          #dexscreener-embed iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border: 0;
-          }
-        </style>
-        <div id="dexscreener-embed"><iframe
-            src="https://dexscreener.com/bsc/0xCEBB17C174195D99A1d121e8186Bd3a5aB6911E0?embed=1&loadChartSettings=0&chartDefaultOnMobile=1&chartTheme=dark&theme=light&chartStyle=1&chartType=usd&interval=60"></iframe>
-        </div>
-      </div>
-    </div>
 
     <!-- Nova Seção: Bônus de Indicação -->
     <section id="referral-bonus" class="w-full my-24">
@@ -344,26 +313,25 @@
         <div data-aos="fade-right" class="col-span-12 lg:col-span-6">
           <div class="w-full">
             <img :src="require('~/assets/img/img-sections/referral_bonus.png')" class="w-full"
-              alt="Bônus de Indicação" />
+              :alt="$t('Bônus de Indicação')" />
           </div>
         </div>
         <div data-aos="fade-left" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            Impulsione o Crescimento com Nosso <span class="text-header-gradient">Bônus de Indicação</span>
+            {{ $t('Impulsione o Crescimento com Nosso') }} <span class="text-header-gradient">{{ $t('Bônus de Indicação') }}</span>
           </h2>
           <p class="paragraph">
-            Convide amigos para se juntar à nossa comunidade e ganhe bônus sobre as compras, tarefas e renovações
-            realizadas por eles, até o 10º nível de indicação.
+            {{ $t('Convide amigos para se juntar à nossa comunidade e ganhe bônus sobre as compras, tarefas e renovações realizadas por eles, até o 10º nível de indicação.') }}
           </p>
           <ul class="space-y-4 sm:space-y-2">
-            <LandingListItem title="Receba bônus direto de 10% no primeiro nível" />
-            <LandingListItem title="Receba 1% de bônus por cada nível adicional (até o 10° nível)" />
-            <LandingListItem title="Construa sua rede e aumente seus ganhos a longo prazo" />
+            <LandingListItem :title="$t('Receba bônus direto de 10% no primeiro nível')" />
+            <LandingListItem :title="$t('Receba 1% de bônus por cada nível adicional (até o 10° nível)')" />
+            <LandingListItem :title="$t('Construa sua rede e aumente seus ganhos a longo prazo')" />
           </ul>
 
           <button class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
             @click="openFullReferralTreeModal">
-            Ver Rede Completa de Indicações
+            {{ $t('Ver Rede Completa de Indicações') }}
           </button>
         </div>
       </BaseSection>
@@ -374,7 +342,7 @@
       class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
       <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-3/4 lg:w-1/2 overflow-hidden">
         <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-lg font-semibold">Endereços que Garantem seu Bônus</h2>
+          <h2 class="text-lg font-semibold">{{ $t('Endereços que Garantem seu Bônus') }}</h2>
           <button @click="showFullReferralTreeModal = false" class="text-white hover:text-gray-300">
             ✕
           </button>
@@ -383,15 +351,16 @@
 
           <!-- Caso não haja referências -->
           <div v-if="fullReferralTree.length === 0" class="text-center">
-            <p class="text-gray-600 text-lg font-semibold">Você ainda não possui indicações cadastradas. 🙁</p>
+            <p class="text-gray-600 text-lg font-semibold">{{ $t('Você ainda não possui indicações cadastradas.') }} 🙁
+            </p>
           </div>
 
           <div v-else>
             <table class="w-full text-left border-collapse border border-gray-300">
               <thead>
                 <tr class="bg-gray-100">
-                  <th class="px-4 py-2 border border-gray-300">Endereço</th>
-                  <th class="px-4 py-2 border border-gray-300">Data de Adesão</th>
+                  <th class="px-4 py-2 border border-gray-300">{{ $t('Endereço') }}</th>
+                  <th class="px-4 py-2 border border-gray-300">{{ $t('Data de Adesão') }}</th>
                   <!-- <th class="px-4 py-2 border border-gray-300">Bônus Recebido (USDT)</th>
                   <th class="px-4 py-2 border border-gray-300">Nível</th> -->
                 </tr>
@@ -415,20 +384,20 @@
       <BaseSection>
         <div class="col-span-12 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            Compartilhe seu <span class="text-header-gradient">Link de Convite</span>
+            {{ $t('Compartilhe seu') }} <span class="text-header-gradient">{{ $t('Link de Convite') }}</span>
           </h2>
           <p class="paragraph">
-            Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe
-            bônus ao trazer novos membros!
+            {{ $t('Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe bônus ao trazer novos membros!') }}
           </p>
           <div v-if="userAddress" class="flex items-center space-x-4">
             <input type="text" :value="inviteLink" readonly
               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
             <BaseButton class="px-4 py-2 bg-blue-500 text-white rounded-lg" @click="copyInviteLink">
-              Copiar
+              {{ $t('Copiar') }}
             </BaseButton>
           </div>
-          <div v-else class="text-gray-600">Por favor, conecte sua carteira para gerar seu link de convite.</div>
+          <div v-else class="text-gray-600">{{ $t('Por favor, conecte sua carteira para gerar seu link de convite.') }}
+          </div>
         </div>
       </BaseSection>
     </section>
@@ -438,12 +407,12 @@
       class="max-w-screen-xl mx-4 sm:mx-auto px-6 sm:px-8 lg:px-10 py-16 bg-gradient-to-b from-[#f9fcff] to-[#e6f7ff] rounded-lg shadow-lg">
       <div v-if="isUpdating" class="text-center my-6">
         <div class="spinner"></div>
-        <p class="text-gray-600">Atualizando...</p>
+        <p class="text-gray-600">{{ $t('Atualizando...') }}</p>
       </div>
       <div class="w-full text-center mb-12">
-        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-800">📊 Estatísticas da Comunidade</h2>
+        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-800">📊 {{ $t('Estatísticas da Comunidade') }}</h2>
         <p data-aos="fade-up" data-aos-delay="200" class="text-gray-600 mt-4 text-lg">
-          Acompanhe o desempenho e as interações da comunidade dentro da rede InvisTribe.
+          {{ $t('Acompanhe o desempenho e as interações da comunidade dentro da rede InvisTribe.') }}
         </p>
       </div>
 
@@ -454,7 +423,7 @@
         <div v-for="(stat, index) in stats" :key="index"
           class="flex flex-col items-center space-y-4 p-6 bg-white rounded-xl shadow-md">
           <div class="text-5xl font-bold text-blue-600">{{ stat.value }}</div>
-          <div class="text-lg font-medium text-gray-700">{{ stat.label }}</div>
+          <div class="text-lg font-medium text-gray-700">{{ $t(stat.label) }}</div>
         </div>
       </div>
     </section>
@@ -470,22 +439,20 @@
         </div>
         <div class="col-span-12 lg:col-span-5 space-y-6 px-4 sm:px-6 mt-20">
           <h2 class="text-4xl font-semibold">
-            Transparência e <span class="text-header-gradient">Segurança</span> em Primeiro Lugar
+            {{ $t('Transparência e') }} <span class="text-header-gradient">{{ $t('Segurança') }}</span> {{ $t('em Primeiro Lugar') }}
           </h2>
           <p class="paragraph">
-            Todas as operações são gerenciadas por um contrato inteligente na blockchain, garantindo segurança,
-            transparência e imutabilidade das regras do sistema. O uso de USDT protege os participantes da volatilidade
-            do mercado cripto.
+            {{ $t('Todas as operações são gerenciadas por um contrato inteligente na blockchain, garantindo segurança, transparência e imutabilidade das regras do sistema.O uso de USDT protege os participantes da volatilidade do mercado cripto.') }}
           </p>
           <ul class="space-y-4 sm:space-y-2">
-            <LandingListItem title="Transparência e Imutabilidade na Blockchain" />
-            <LandingListItem title="Segurança Financeira com USDT" />
-            <LandingListItem title="Auditoria Independente do Contrato" />
+            <LandingListItem :title="$t('Transparência e Imutabilidade na Blockchain')" />
+            <LandingListItem :title="$t('Segurança Financeira com USDT')" />
+            <LandingListItem :title="$t('Auditoria Independente do Contrato')" />
           </ul>
           <BaseButton
             class="w-full sm:max-w-[240px] px-10 py-4 bg-inherit text-gradient border border-[#0c66ee] text-base"
             @click="showContractModal">
-            Saiba Mais
+            {{ $t('Saiba Mais') }}
           </BaseButton>
         </div>
       </BaseSection>
@@ -500,7 +467,7 @@
       <button
         class="fixed bottom-6 right-6 z-50 bg-blue-500 text-white px-5 py-3 rounded-full shadow-lg hover:bg-blue-600 transition"
         @click="showModal = true">
-        Meus Emblemas
+        {{ $t('Meus Emblemas') }}
       </button>
 
       <!-- Modal de Tela Cheia -->
@@ -508,7 +475,7 @@
         @click.self="showModal = false">
         <!-- Modal Header -->
         <div class="sticky top-0 bg-blue-500 text-white p-4 flex justify-between items-center">
-          <h2 class="text-xl font-bold">Meus Emblemas</h2>
+          <h2 class="text-xl font-bold">{{ $t('Meus Emblemas') }}</h2>
           <button class="text-white hover:text-gray-200 focus:outline-none" @click="showModal = false">✕</button>
         </div>
 
@@ -516,12 +483,12 @@
         <div class="p-6 space-y-6">
           <!-- Verifica se o usuário tem emblemas -->
           <div v-if="userEmblems.length === 0" class="text-center py-8">
-            <h3 class="text-2xl font-semibold text-white mb-4">Você ainda não possui emblemas.</h3>
-            <p class="text-white">Adquira seu primeiro emblema e comece a participar da comunidade de ajuda mútua.</p>
+            <h3 class="text-2xl font-semibold text-white mb-4">{{ $t('Você ainda não possui emblemas.') }}</h3>
+            <p class="text-white">{{ $t('Adquira seu primeiro emblema e comece a participar da comunidade de ajuda mútua.') }}</p>
             <BaseButton
               class="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
               @click="closeModalAndScroll">
-              Adquirir Emblema
+              {{ $t('Adquirir Emblema') }}
             </BaseButton>
           </div>
 
@@ -531,7 +498,8 @@
               <div v-for="(emblem, index) in userEmblems" :key="emblem.id"
                 class="col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center transform hover:scale-105 mt-4">
                 <div class="flex flex-col items-center mb-4">
-                  <h3 class="text-2xl font-semibold text-gray-800 mb-2">Emblema Nível {{ emblem.level }}</h3>
+                  <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ $t('Emblema Nível') + ' ' + emblem.level }}
+                  </h3>
                   <span class="px-3 py-1 text-sm font-semibold rounded-full" :class="{
                     'bg-green-100 text-green-600': emblem.active,
                     'bg-red-100 text-red-600': !emblem.active,
@@ -540,14 +508,15 @@
                   </span>
                 </div>
                 <div class="text-gray-600 mb-4">
-                  <p><strong>Data de Aquisição:</strong> {{ formatDate(emblem.purchaseTime) }}</p>
-                  <p><strong>Data de Expiração:</strong> {{ formatDate(emblem.expiryTime) }}</p>
-                  <p><strong>Ganho Total:</strong> {{ formatTotalEarned(emblem.totalEarned) }} USDT</p>
+                  <p><strong>{{ $t('Data de Aquisição:') }}</strong> {{ formatDate(emblem.purchaseTime) }}</p>
+                  <p><strong>{{ $t('Data de Expiração:') }}</strong> {{ formatDate(emblem.expiryTime) }}</p>
+                  <p><strong>{{ $t('Ganho Total:') }}</strong> {{ formatTotalEarned(emblem.totalEarned) }} USDT</p>
                 </div>
 
                 <!-- Contador e barra de progresso para compromisso -->
                 <div class="mb-2">
-                  <p class="text-gray-700">Compromisso: {{ formatTimeRemaining(emblem, 'commitment') }}</p>
+                  <p class="text-gray-700">{{ $t('Compromisso:') + ' ' + formatTimeRemaining(emblem, 'commitment') }}
+                  </p>
                   <div class="w-full bg-gray-200 rounded-full h-2.5">
                     <div class="bg-blue-500 h-2.5 rounded-full" :style="{ width: emblem.commitmentProgress + '%' }">
                     </div>
@@ -557,13 +526,13 @@
                   class="w-full px-4 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
                   :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'commitment') || isProcessing }"
                   :disabled="!isActionEnabled(emblem, 'commitment') || isProcessing" @click="makeCommitment(emblem.id)">
-                  <span v-if="!isProcessing">Fazer Compromisso ({{ formatCommitmentCost(emblem.level) }} USDT)</span>
-                  <span v-else>Processando...</span>
+                  <span v-if="!isProcessing">{{ $t('Fazer Compromisso') + ' (' + formatCommitmentCost(emblem.level) + ' USDT) ' }}</span>
+                  <span v-else>{{ $t('Processando...') }}</span>
                 </BaseButton>
 
                 <!-- Contador e barra de progresso para solicitação de ajuda -->
                 <div class="mb-2 mt-4">
-                  <p class="text-gray-700">Recompensa: {{ formatTimeRemaining(emblem, 'aid') }}</p>
+                  <p class="text-gray-700">{{ $t('Recompensa:') + ' ' + formatTimeRemaining(emblem, 'aid') }}</p>
                   <div class="w-full bg-gray-200 rounded-full h-2.5">
                     <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: emblem.aidProgress + '%' }"></div>
                   </div>
@@ -572,14 +541,14 @@
                   class="w-full px-4 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
                   :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'aid') || isProcessing }"
                   :disabled="!isActionEnabled(emblem, 'aid') || isProcessing" @click="requestAid(emblem.id)">
-                  <span v-if="!isProcessing">Recompensa (Estimativa: {{ formatAidRequestReward(emblem.level) }}
-                    USDT)</span>
-                  <span v-else>Processando...</span>
+                  <span v-if="!isProcessing">{{ $t('Recompensa (Estimativa:') + ' ' +
+                    formatAidRequestReward(emblem.level) + ' USDT)' }}</span>
+                  <span v-else>{{ $t('Processando...') }}</span>
                 </BaseButton>
 
                 <!-- Contador e barra de progresso para renovação -->
                 <div class="mb-2 mt-4">
-                  <p class="text-gray-700">Renovação: {{ formatTimeRemaining(emblem, 'renewal') }}</p>
+                  <p class="text-gray-700">{{ $t('Renovação:') + formatTimeRemaining(emblem, 'renewal') }}</p>
                   <div class="w-full bg-gray-200 rounded-full h-2.5">
                     <div class="bg-purple-500 h-2.5 rounded-full" :style="{ width: emblem.renewalProgress + '%' }">
                     </div>
@@ -589,8 +558,8 @@
                   class="w-full px-4 py-3 bg-purple-500 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
                   :class="{ 'opacity-50 cursor-not-allowed': !isActionEnabled(emblem, 'renewal') || isProcessing }"
                   :disabled="!isActionEnabled(emblem, 'renewal') || isProcessing" @click="renewEmblem(emblem.id)">
-                  <span v-if="!isProcessing">Renovar Emblema ({{ formatRenewalCost(emblem.level) }} USDT)</span>
-                  <span v-else>Processando...</span>
+                  <span v-if="!isProcessing">{{ $t('Renovar Emblema') + ' (' + formatRenewalCost(emblem.level) + ' USDT) ' }}</span>
+                  <span v-else>{{ $t('Processando...') }}</span>
                 </BaseButton>
               </div>
             </BaseSection>
@@ -604,12 +573,12 @@
       <BaseSection>
         <div data-aos="fade-right" data-aos-delay="150" class="col-span-12 lg:col-span-6">
           <div class="w-full">
-            <img :src="require('~/assets/img/img-sections/faq.png')" class="w-full" alt="Perguntas Frequentes" />
+            <img :src="require('~/assets/img/img-sections/faq.png')" class="w-full" :alt="$t('Perguntas Frequentes')" />
           </div>
         </div>
         <div data-aos="fade-left" data-aos-delay="150" class="col-span-12 lg:col-span-6 px-4 sm:px-6 mt-8">
-          <span class="text-base text-gradient font-semibold uppercase mb-4 sm:mb-2">Suporte</span>
-          <h2 class="text-3xl sm:text-4xl font-semibold mb-10 sm:mb-6">Perguntas Frequentes</h2>
+          <span class="text-base text-gradient font-semibold uppercase mb-4 sm:mb-2">{{ $t('Suporte') }}</span>
+          <h2 class="text-3xl sm:text-4xl font-semibold mb-10 sm:mb-6">{{ $t('Perguntas Frequentes') }}</h2>
 
           <ul class="shadow-box">
             <BaseAccordion v-for="(accordion, index) in accordions" :key="index" :accordion="accordion" />
@@ -621,7 +590,7 @@
     <div class="w-full my-10 flex justify-center">
       <a v-smooth-scroll data-aos="flip-down" data-aos-delay="150" href="#navbar"
         class="px-6 py-3 flex items-center space-x-2 bg-[#FAFAFA] hover:bg-gray-100 hover:shadow-md border border-[#DDDDDD] rounded-md text-gray-700">
-        <span>Voltar ao Topo</span>
+        <span>{{ $t('Voltar ao Topo') }}</span>
         <ArrowUpIcon :size="20" />
       </a>
     </div>
@@ -663,7 +632,6 @@ export default {
       showModalCalculator: false,
       showAffiliatesModal: false, // Controla a exibição do modal
       affiliates: [], // Lista de afiliados
-      showPriceChartModal: false,
 
       accordions: [
         {
@@ -689,7 +657,7 @@ export default {
         {
           title: 'Como funciona o bônus por indicação?',
           description:
-            'Você recebe 5% do valor movimentado por membros indicados diretamente por você, incluindo aquisições de emblemas e contribuições regulares.',
+            'Ganhe 10% do valor movimentado por membros diretamente indicados por você, abrangendo aquisições de emblemas e contribuições regulares. Além disso, receba um bônus adicional de 1% para cada nível de indicação sucessivo, até o 10º nível, maximizando seus ganhos enquanto expande sua rede.',
         },
         {
           title: 'O que acontece se uma solicitação não for atendida em 24 horas?',
@@ -758,6 +726,14 @@ export default {
   mounted() {
     this.initialize()
       .then(() => {
+
+        // Verifica o link de convite
+        this.checkInviteLink();
+
+        // Carrega o uplineAddress do localStorage
+        const storedUpline = localStorage.getItem('uplineAddress');
+        this.uplineAddress = storedUpline || null;
+
         // Inicia atualizações constantes (progressos, fila, etc.)
         this.startProgressUpdater();
         this.startQueueUpdater();
@@ -828,7 +804,7 @@ export default {
       // Compra inicial do emblema
       simulationData.push({
         day: ++day,
-        description: 'Compra de Emblema',
+        description: this.$t('Compra de Emblema'),
         amount: -initialCost,
         balance,
       });
@@ -842,7 +818,7 @@ export default {
           balance -= commitmentCost;
           simulationData.push({
             day,
-            description: 'Compromisso',
+            description: this.$t('Compromisso'),
             amount: -commitmentCost,
             balance,
           });
@@ -853,7 +829,7 @@ export default {
           balance += reward;
           simulationData.push({
             day,
-            description: 'Recompensa',
+            description: this.$t('Recompensa'),
             amount: reward,
             balance,
           });
@@ -1139,6 +1115,15 @@ export default {
       this.purchaseMessage = ''
 
       try {
+
+        // Obtém o uplineAddress do localStorage
+        const storedUpline = localStorage.getItem('uplineAddress')
+        const upline = storedUpline || null
+
+        if(!upline) {
+          throw new Error('Upline inválido!')
+        }
+
         // Validações básicas
         if (this.selectedLevel < 1 || this.selectedLevel > 50) {
           throw new Error('O nível do emblema deve estar entre 1 e 50.')
@@ -1165,10 +1150,6 @@ export default {
           const approveTx = await usdtContract.approve(this.contractAddress, ethers.constants.MaxUint256)
           await approveTx.wait()
         }
-
-        // Obtém o uplineAddress do localStorage
-        const storedUpline = localStorage.getItem('uplineAddress')
-        const upline = storedUpline || ethers.constants.AddressZero
 
         // Realiza a compra do emblema
         const purchaseTx = await this.contract.purchaseEmblem(this.selectedLevel, upline)
@@ -1240,11 +1221,11 @@ export default {
         const tx = await this.contract.makeCommitment(emblemId)
         await tx.wait()
 
-        this.$toast.success('Compromisso realizado com sucesso.')
+        this.$toast.success(this.$t('Compromisso realizado com sucesso.'))
         await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao fazer compromisso:', error)
-        this.$toast.error('Falha ao realizar compromisso.')
+        this.$toast.error(this.$t('Falha ao realizar compromisso.'))
       } finally {
         this.isProcessing = false
       }

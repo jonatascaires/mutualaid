@@ -39,6 +39,7 @@ export default {
     '~/plugins/mdi.js',
     '~/plugins/toast.client.js',
     '~/plugins/vue-scrollto.js',
+    '~/plugins/i18n.js',
   ],
 
   // Diretório de componentes (autoimportação)

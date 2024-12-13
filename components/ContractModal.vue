@@ -71,12 +71,12 @@
             <div class="bg-gray-100 p-4 rounded-lg mt-6">
               <h3 class="font-semibold text-lg">Endereço do Contrato:</h3>
               <p class="text-blue-500 font-mono break-words">
-                0x4460081014F07649102828A3da9320cd5cFB8fA7
+                0x9cC5a6dA4eA24f5ddD89Db1ACca9792De3D8BCE7
               </p>
               <div class="text-center mt-4">
                 <BaseButton
                   class="px-6 py-3 bg-blue-500 text-white rounded-lg"
-                  @click="openBscScan('0x4460081014F07649102828A3da9320cd5cFB8fA7')"
+                  @click="openBscScan('0x9cC5a6dA4eA24f5ddD89Db1ACca9792De3D8BCE7')"
                 >
                   Ver no BscScan
                 </BaseButton>

@@ -8,12 +8,11 @@
 
       <!-- Descrição -->
       <p class="text-gray-700 text-sm">
-        InvisTribe é uma comunidade de renda passiva que une pessoas para apoio financeiro em um ambiente transparente e
-        seguro.
+        {{ $t('InvisTribe é uma comunidade de renda passiva que une pessoas para apoio financeiro em um ambiente transparente e seguro.' ) }}
       </p>
 
       <!-- Direitos autorais -->
-      <div class="text-gray-500 text-xs">&copy; 2024 InvisTribe. Todos os direitos reservados.</div>
+      <div class="text-gray-500 text-xs">&copy; 2024 InvisTribe. {{ $t('Todos os direitos reservados.') }}</div>
     </div>
   </footer>
 </template>

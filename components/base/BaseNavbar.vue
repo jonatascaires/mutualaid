@@ -7,17 +7,36 @@
         </div>
         <!-- Menu para telas grandes -->
         <ul class="hidden lg:flex lg:space-x-6">
-          <NavLink name="Início" url="#hero" />
-          <NavLink name="Fila" url="#help-queue" />
-          <NavLink name="Participar" url="#purchase-emblem" />
-          <NavLink name="Token" url="#token-partnership" />
-          <NavLink name="Bônus" url="#referral-bonus" />
-          <NavLink name="Estatísticas" url="#community-stats" />
-          <NavLink name="Segurança" url="#security" />
-          <NavLink name="FAQ" url="#faq" />
+          <NavLink :name="$t('Início')" url="#hero" />
+          <NavLink :name="$t('Comprar')" url="#purchase-emblem" />
+          <NavLink :name="$t('Token')" url="#token-partnership" />
+          <NavLink :name="$t('Bônus')" url="#referral-bonus" />
+          <NavLink :name="$t('Estatísticas')" url="#community-stats" />
+          <NavLink :name="$t('Segurança')" url="#security" />
         </ul>
       </div>
       <div class="flex items-center space-x-4">
+        <!-- Seletor de idiomas -->
+        <div class="relative">
+          <button @click="toggleLanguageDropdown"
+            class="flex items-center px-3 py-2 bg-gray-100 text-gray-800 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <img :src="currentFlag" alt="Current Language" class="w-6 h-6 mr-2" />
+            <span>{{ currentLanguageLabel }}</span>
+            <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div v-if="showDropdown"
+            class="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+            <div v-for="(language, code) in languages" :key="code" @click="selectLanguage(code)"
+              class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              <img :src="language.flag" :alt="language.label" class="w-6 h-6 mr-2" />
+              <span>{{ language.label }}</span>
+            </div>
+          </div>
+        </div>
         <!-- Botão de menu para dispositivos móveis -->
         <button class="lg:hidden rounded-lg focus:outline-none focus:shadow-outline" @click="toggleMenu">
           <SegmentIcon v-if="!open" :size="24" />
@@ -27,7 +46,7 @@
         <div class="hidden lg:flex items-center space-x-3">
           <button v-if="!isConnected"
             class="px-4 py-2 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white rounded-lg" @click="connectWallet">
-            Conectar Carteira
+            {{ $t('Conectar Carteira') }}
           </button>
           <div v-else class="flex items-center space-x-2">
             <span class="px-3 py-1 bg-gray-100 rounded-full text-gray-800">{{ shortenedAddress }}</span>
@@ -55,7 +74,7 @@
           <button v-if="!isConnected"
             class="w-full px-6 py-2 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white rounded-lg"
             @click="connectWallet">
-            Conectar Carteira
+            {{ $t('Conectar Carteira') }}
           </button>
           <div v-else class="flex flex-col space-y-2 items-center">
             <span class="px-3 py-1 bg-gray-100 rounded-full text-gray-800">{{ shortenedAddress }}</span>
@@ -102,6 +121,13 @@ export default {
       networkId: null,
       usdtBalance: '0.00',
       requiredChainId: '56', // BSC Mainnet
+      currentLanguage: 'en', // Idioma padrão
+      showDropdown: false,
+      languages: {
+        en: { label: 'ENG', flag: 'https://flagcdn.com/w40/us.png' },
+        pt: { label: 'PT', flag: 'https://flagcdn.com/w40/br.png' },
+        es: { label: 'ES', flag: 'https://flagcdn.com/w40/es.png' },
+      },
     }
   },
   computed: {
@@ -110,6 +136,12 @@ export default {
     },
     shortenedAddress() {
       return this.address ? `${this.address.slice(0, 6)}...${this.address.slice(-4)}` : ''
+    },
+    currentLanguageLabel() {
+      return this.languages[this.currentLanguage].label;
+    },
+    currentFlag() {
+      return this.languages[this.currentLanguage].flag;
     },
   },
   mounted() {
@@ -132,6 +164,14 @@ export default {
     }
   },
   methods: {
+    toggleLanguageDropdown() {
+      this.showDropdown = !this.showDropdown;
+    },
+    selectLanguage(lang) {
+      this.currentLanguage = lang;
+      this.$i18n.locale = lang;
+      this.showDropdown = false;
+    },
     toggleMenu() {
       this.open = !this.open
     },
@@ -261,5 +301,13 @@ export default {
   .lg\:hidden {
     padding: 1rem 0;
   }
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
 </style>
