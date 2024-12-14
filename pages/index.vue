@@ -4,17 +4,14 @@
     <section id="hero" class="w-full pb-24">
       <BaseSection>
         <div class="col-span-12 lg:col-span-6 mt-12 xl:mt-10 space-y-4 sm:space-y-6 px-6 text-center sm:text-left">
-          <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">{{ $t(`Bem-vindo ao
-            InvisTribe`) }}</span>
+          <span data-aos="fade-right" class="text-base text-gradient font-semibold uppercase">{{ $t(`Bem-vindo ao InvisTribe`) }}</span>
           <h1 data-aos="fade-right"
             class="text-[2.5rem] sm:text-5xl xl:text-6xl font-bold leading-tight capitalize sm:pr-8 xl:pr-10">
             {{ $t(`Unindo Pessoas em uma`) }} <span class="text-header-gradient">{{ $t(`Comunidade de Renda Passiva`)
               }}</span>
           </h1>
           <p data-aos="fade-down" data-aos-delay="300" class="paragraph hidden sm:block">
-            {{ $t(`Bem-vindo ao nosso inovador sistema de renda passiva, onde os participantes podem ganhar recompensas
-            financeiras realizando tarefas de forma transparente e sustentável. Gerenciado por um contrato inteligente
-            na blockchain, garantimos segurança, transparência e imutabilidade das operações.`) }}
+            {{ $t(`Bem-vindo ao nosso inovador sistema de renda passiva, onde os participantes podem ganhar recompensas financeiras realizando tarefas de forma transparente e sustentável. Gerenciado por um contrato inteligente na blockchain, garantimos segurança, transparência e imutabilidade das operações.`) }}
           </p>
           <div data-aos="fade-up" data-aos-delay="500"
             class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-2">
@@ -136,15 +133,13 @@
         <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">{{ $t('Adquira seu Emblema e Comece a Ganhar') }}</h2>
           <p class="paragraph">
-            {{ $t(`Para ingressar na comunidade, adquira um emblema que representa seu nível de compromisso. Escolha o
-            nível que melhor se adapta a você e comece a gerar renda passiva realizando tarefas.`) }}
+            {{ $t(`Para ingressar na comunidade, adquira um emblema que representa seu nível de compromisso. Escolha o nível que melhor se adapta a você e comece a gerar renda passiva realizando tarefas.`) }}
           </p>
 
           <div class="space-y-6 lg:pr-12">
             <!-- Campo de seleção de nível do emblema -->
             <div>
-              <label for="level" class="block text-gray-700 font-semibold mb-2">{{ $t(`Selecione o Nível do Emblema (1 a
-                50)`) }}</label>
+              <label for="level" class="block text-gray-700 font-semibold mb-2">{{ $t(`Selecione o Nível do Emblema (1 a 50)`) }}</label>
               <input id="level" v-model.number="selectedLevel" type="number" min="1" max="50"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 :placeholder="$t('Digite um nível de 1 a 50')" />
@@ -1074,6 +1069,15 @@ export default {
       try {
         const data = await this.contract.getStatistics();
 
+        const totalDonated = parseFloat(ethers.utils.formatUnits(data._totalDonated || 0, 18));
+        const totalBonusesPaid = parseFloat(ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18));
+        const totalSentToAdminWallet = parseFloat(ethers.utils.formatUnits(data._totalSentToAdminWallet || 0, 18));
+        const totalLiquiditySent = parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18));
+
+        const totalContribuicoesAjustado = totalDonated - totalBonusesPaid;
+        const enviadoParaGestaoAjustado = totalSentToAdminWallet - (0.3 * totalBonusesPaid);
+        const valorLiquidezAjustado = totalLiquiditySent - (0.7 * totalBonusesPaid);
+
         this.stats = [
           { label: 'Compromissos Realizados', value: data._totalCommitmentsMade?.toNumber() || 0 },
           { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
@@ -1082,13 +1086,14 @@ export default {
           { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
           { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
           { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
-          { label: 'Contribuições Totais (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalDonated || 0, 18)).toFixed(2)}` },
-          { label: 'Bonificações Pagas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18)).toFixed(2)}` },
-          { label: 'Enviado para Gestão Financeira (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalSentToAdminWallet || 0, 18)).toFixed(2)}` },
-          { label: 'Valor Direcionado Para a Liquidez de INVT (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18)).toFixed(2)}` },
+          { label: 'Contribuições Totais (USDT)', value: `${totalContribuicoesAjustado.toFixed(2)}` },
+          { label: 'Bonificações Pagas (USDT)', value: `${totalBonusesPaid.toFixed(2)}` },
+          { label: 'Enviado para Gestão Financeira (USDT)', value: `${enviadoParaGestaoAjustado.toFixed(2)}` },
+          { label: 'Valor Direcionado Para a Liquidez de INVT (USDT)', value: `${valorLiquidezAjustado.toFixed(2)}` },
           { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
           { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
         ];
+
       } catch (error) {
         // console.error('Erro ao obter estatísticas:', error.message);
       } finally {

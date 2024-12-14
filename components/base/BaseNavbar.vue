@@ -156,6 +156,12 @@ export default {
         }
       })
     }
+
+    const savedLanguage = localStorage.getItem('selectedLanguage')
+    if (savedLanguage && this.languages[savedLanguage]) {
+      this.currentLanguage = savedLanguage
+      this.$i18n.locale = savedLanguage
+    }
   },
   unmounted() {
     if (window.ethereum) {
@@ -171,6 +177,7 @@ export default {
       this.currentLanguage = lang;
       this.$i18n.locale = lang;
       this.showDropdown = false;
+      localStorage.setItem('selectedLanguage', lang);
     },
     toggleMenu() {
       this.open = !this.open
