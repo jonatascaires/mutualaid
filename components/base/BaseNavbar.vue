@@ -1,6 +1,6 @@
 <template>
-  <nav id="navbar" class="relative z-10 w-full text-neutral-800 bg-white shadow-md">
-    <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4 py-4 lg:px-8">
+  <nav id="navbar" class="fixed top-0 left-0 z-50 w-full text-neutral-800 bg-white shadow-md">
+    <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4 py-1 lg:py-2 lg:px-8">
       <div class="flex items-center">
         <div class="mr-4 lg:mr-8">
           <img :src="require('~/assets/img/logo/mutualaid-logo.svg')" class="w-24 xl:w-36" alt="MutualAid Logo" />

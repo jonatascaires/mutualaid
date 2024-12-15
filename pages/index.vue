@@ -1078,20 +1078,31 @@ export default {
         const enviadoParaGestaoAjustado = totalSentToAdminWallet - (0.3 * totalBonusesPaid);
         const valorLiquidezAjustado = totalLiquiditySent - (0.7 * totalBonusesPaid);
 
+        // Cálculos das porcentagens baseadas em enviadoParaGestaoAjustado:
+        const upgrade = enviadoParaGestaoAjustado * 0.30;         // 30%
+        const bonificacaoGlobal = enviadoParaGestaoAjustado * 0.40; // 40%
+        const jackpot = enviadoParaGestaoAjustado * 0.15;         // 15%
+        const videoYoutube = enviadoParaGestaoAjustado * 0.15;     // 15%
+
         this.stats = [
+          { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
+          { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
           { label: 'Compromissos Realizados', value: data._totalCommitmentsMade?.toNumber() || 0 },
           { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
           { label: 'Renovações Concluídas', value: data._totalRenewals?.toNumber() || 0 },
           { label: 'Valor Total em Renovações (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)).toFixed(2)}` },
-          { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
-          { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
-          { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
           { label: 'Contribuições Totais (USDT)', value: `${totalContribuicoesAjustado.toFixed(2)}` },
+
           { label: 'Bonificações Pagas (USDT)', value: `${totalBonusesPaid.toFixed(2)}` },
-          { label: 'Enviado para Gestão Financeira (USDT)', value: `${enviadoParaGestaoAjustado.toFixed(2)}` },
-          { label: 'Valor Direcionado Para a Liquidez de INVT (USDT)', value: `${valorLiquidezAjustado.toFixed(2)}` },
+          { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
           { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
           { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
+
+          { label: 'Upgrade (USDT)', value: `${upgrade.toFixed(2)}` },                  // 30% de enviadoParaGestaoAjustado
+          { label: 'Bonificação Global (USDT)', value: `${bonificacaoGlobal.toFixed(2)}` }, // 40% de enviadoParaGestaoAjustado
+          { label: 'Jackpot (USDT)', value: `${jackpot.toFixed(2)}` },                  // 15% de enviadoParaGestaoAjustado
+          { label: 'Vídeo Youtube (USDT)', value: `${videoYoutube.toFixed(2)}` },        // 15% de enviadoParaGestaoAjustado
+          { label: 'Liquidez do INVT (USDT)', value: `${valorLiquidezAjustado.toFixed(2)}` },
         ];
 
       } catch (error) {

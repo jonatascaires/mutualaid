@@ -6,7 +6,7 @@
       ></div>
       <BaseNavbar />
 
-      <main class="text-neutral-800">
+      <main class="text-neutral-800 pt-24">
         <Nuxt />
       </main>
 
