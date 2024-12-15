@@ -175,7 +175,7 @@
 
               <!-- Mostrar o Upline -->
               <p v-if="uplineAddress" class="text-gray-600 mt-2">
-                <span class="font-semibold text-yellow-600">{{ $t('Endereço do Upline:') }}</span> {{ compactAddress(uplineAddress) }}
+                <span class="font-semibold text-yellow-600">{{ $t('Upline:') }}</span> {{ compactAddress(uplineAddress) }}
               </p>
               <p v-else class="text-red-600 mt-2">
                 {{ $t('Você não possui um upline configurado. Por favor, use um link de convite para continuar.') }}
