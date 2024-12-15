@@ -184,5 +184,8 @@
     "Os valores pendentes serão liquidados em tokens Invistech, que podem ser facilmente convertidos para outras criptomoedas ou stablecoins.": "Pending amounts will be settled in Invistech tokens, which can be easily converted into other cryptocurrencies or stablecoins.",
     "Bonificação Global (USDT)": "Global Bonus (USDT)",
     "Vídeo Youtube (USDT)": "YouTube Video (USDT)",
-    "Liquidez do INVT (USDT)": "INVT Liquidity (USDT)"
+    "Liquidez do INVT (USDT)": "INVT Liquidity (USDT)",
+    "Ativo": "Active",
+    "Expirado": "Expired",
+    "Endereço do Upline": "Upline Address"
 }

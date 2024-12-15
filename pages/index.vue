@@ -466,7 +466,7 @@
       </button>
 
       <!-- Modal de Tela Cheia -->
-      <div v-if="showModal" class="modal-emblem fixed inset-0 z-40 bg-white overflow-y-auto transition-opacity"
+      <div v-if="showModal" class="modal-emblem fixed inset-0 z-[9999] bg-white overflow-y-auto transition-opacity"
         @click.self="showModal = false">
         <!-- Modal Header -->
         <div class="sticky top-0 bg-blue-500 text-white p-4 flex justify-between items-center">
@@ -499,7 +499,7 @@
                     'bg-green-100 text-green-600': emblem.active,
                     'bg-red-100 text-red-600': !emblem.active,
                   }">
-                    {{ emblem.active ? 'Ativo' : 'Expirado' }}
+                    {{ emblem.active ? $t('Ativo') : $t('Expirado') }}
                   </span>
                 </div>
                 <div class="text-gray-600 mb-4">
