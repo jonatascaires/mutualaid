@@ -95,12 +95,12 @@
                 {{ $t('Restante:') }} <span class="font-semibold text-red-500">{{ request.remainingAid }} USDT</span>
               </p>
             </div>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
               <ClockIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
                 {{ $t('Tempo Restante:') }} {{ formatTime(request.timeRemaining) }}
               </p>
-            </div>
+            </div> -->
             <!-- Barra de progresso -->
             <div class="w-full bg-gray-200 rounded-full h-2.5">
               <div class="bg-blue-600 h-2.5 rounded-full" :style="{ width: request.progress + '%' }"></div>
