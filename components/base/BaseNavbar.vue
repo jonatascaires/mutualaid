@@ -23,7 +23,7 @@
             class="flex items-center px-3 py-2 bg-gray-100 text-gray-800 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <img :src="currentFlag" alt="Current Language" class="w-6 h-6 mr-2" />
-            <span>{{ currentLanguageLabel }}</span>
+            <!-- <span>{{ currentLanguageLabel }}</span> -->
             <svg
               class="w-4 h-4 ml-2"
               xmlns="http://www.w3.org/2000/svg"
