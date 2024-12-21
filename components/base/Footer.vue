@@ -12,7 +12,7 @@
       </p>
 
       <!-- Direitos autorais -->
-      <div class="text-gray-500 text-xs">&copy; 2024 InvisTribe. {{ $t('Todos os direitos reservados.') }}</div>
+      <div class="text-gray-500 text-xs">&copy; 2024 InvisTribe</div>
     </div>
   </footer>
 </template>

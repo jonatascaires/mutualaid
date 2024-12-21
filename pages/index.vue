@@ -151,26 +151,22 @@
               <p class="text-xl font-bold text-gray-800">{{ emblemCostInUSDT }} USDT</p>
             </div>
 
-            <!-- Informações adicionais, exibidas apenas após a primeira interação -->
             <div v-if="showDetails" class="bg-gray-100 p-4 rounded-lg">
               <h3 class="text-lg font-semibold text-gray-700 mb-2">{{ $t('Detalhes do Emblema') }}</h3>
 
               <!-- Custo e frequência do compromisso -->
               <p class="text-gray-600">
-                <span class="font-semibold text-blue-600">{{ $t('Tarefas Requeridas:') }}</span> {{ commitmentCost }} {{
-                  $t('USDT a cada') }} {{ commitmentPeriodDays }} {{ $t('dias') }}
+                <span class="font-semibold text-blue-600">{{ $t('Tarefas Requeridas:') }}</span> {{ commitmentCost }} {{ $t('USDT a cada') }} {{ commitmentPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Custo e frequência da renovação -->
               <p class="text-gray-600 mt-2">
-                <span class="font-semibold text-purple-600">{{ $t('Renovação do Emblema:') }}</span> {{ renewalCost }}
-                {{ $t('USDT a cada') }} {{ renewalPeriodDays }} {{ $t('dias') }}
+                <span class="font-semibold text-purple-600">{{ $t('Renovação do Emblema:') }}</span> {{ renewalCost }} {{ $t('USDT a cada') }} {{ renewalPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Recompensa estimada -->
               <p class="text-gray-600 mt-2">
-                <span class="font-semibold text-green-600">{{ $t('Renda Estimada:') }}</span> {{ estimatedReward }} {{
-                  $t('USDT disponível a cada') }} {{ aidRequestPeriodDays }} {{ $t('dias') }}
+                <span class="font-semibold text-green-600">{{ $t('Renda Estimada:') }}</span> {{ estimatedReward }} {{ $t('USDT disponível a cada') }} {{ aidRequestPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Mostrar o Upline -->
@@ -179,6 +175,11 @@
               </p>
               <p v-else class="text-red-600 mt-2">
                 {{ $t('Você não possui um upline configurado. Por favor, use um link de convite para continuar.') }}
+              </p>
+
+              <!-- Verificar se o upline é igual ao endereço do usuário -->
+              <p v-if="uplineAddress && uplineAddress.toLowerCase() === userAddress.toLowerCase()" class="text-red-600 mt-2">
+                {{ $t('O endereço do upline é o mesmo que o seu. Por favor, revise.') }}
               </p>
             </div>
 
@@ -490,7 +491,7 @@
           <!-- Exibe os emblemas caso existam -->
           <div v-else>
             <BaseSection>
-              <div v-for="(emblem, index) in userEmblems" :key="emblem.id"
+              <div v-for="(emblem) in userEmblems" :key="emblem.id"
                 class="col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center transform hover:scale-105 mt-4">
                 <div class="flex flex-col items-center mb-4">
                   <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ $t('Emblema Nível') + ' ' + emblem.level }}
@@ -787,6 +788,11 @@ export default {
       return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     },
     calculateSimulation() {
+      if (!Number.isInteger(this.selectedLevelCalculator) || this.selectedLevelCalculator < 1 || this.selectedLevelCalculator > 50) {
+        this.$toast.error(this.$t('O nível do emblema deve ser um número inteiro entre 1 e 50.'));
+        return;
+      }
+
       const level = this.selectedLevelCalculator;
       const initialCost = 30 * level; // Custo inicial do emblema
       const commitmentCost = 5 * level; // Compromisso financeiro
@@ -987,10 +993,10 @@ export default {
     async copyInviteLink() {
       try {
         await navigator.clipboard.writeText(this.inviteLink)
-        this.$toast.success('Link de convite copiado com sucesso!')
+        this.$toast.success(this.$t('Link de convite copiado com sucesso!'))
       } catch (error) {
         // console.error('Erro ao copiar o link:', error)
-        this.$toast.error('Falha ao copiar o link.')
+        this.$toast.error(this.$t('Falha ao copiar o link.'))
       }
     },
 
@@ -1020,14 +1026,14 @@ export default {
           // Obtém o signer
           const signer = this.provider.getSigner()
 
-          // Inicializa o contrato com o signer
-          this.contract = new ethers.Contract(this.contractAddress, contractABI, signer)
-
           // Obtém o endereço do usuário
           this.userAddress = await this.provider.getSigner().getAddress()
 
           // Gera o link de convite
           this.inviteLink = `https://invistribe.com/invite/${this.userAddress}`
+
+          // Inicializa o contrato com o signer
+          this.contract = new ethers.Contract(this.contractAddress, contractABI, signer)
 
           // Busca as estatísticas
           await this.fetchStatistics();
@@ -1040,8 +1046,18 @@ export default {
           if (this.contract && this.userAddress) {
             await this.fetchUserEmblems()
           }
+
+          // Escuta mudanças de conta na MetaMask
+          window.ethereum.on('accountsChanged', async (accounts) => {
+            if (accounts.length > 0) {
+              this.userAddress = accounts[0];
+              this.inviteLink = `https://invistribe.com/invite/${this.userAddress}`;
+              await this.fetchUserEmblems(); // Atualiza os emblemas para o novo endereço
+              this.$toast.info(this.$t('Conta da MetaMask alterada.'));
+            }
+          });
         } else {
-          this.$toast.error('Por favor, instale uma carteira Ethereum como o MetaMask.')
+          this.$toast.error(this.$t('Por favor, instale uma carteira Web3 como o MetaMask.'))
           // console.error('Ethereum provider not found')
         }
       } catch (error) {
@@ -1117,87 +1133,92 @@ export default {
     },
     // Método para lidar com a compra do emblema
     async handlePurchase() {
+      if (!Number.isInteger(this.selectedLevel) || this.selectedLevel < 1 || this.selectedLevel > 50) {
+        this.$toast.error(this.$t('O nível do emblema deve ser um número inteiro entre 1 e 50.'));
+        return;
+      }
+
       if (this.showDetails) {
         // Se já estiver mostrando os detalhes, proceder com a compra
-        await this.purchaseEmblem()
+        await this.purchaseEmblem();
       } else {
         // Caso contrário, mostrar os detalhes
-        this.toggleDetails()
+        this.toggleDetails();
       }
     },
     async purchaseEmblem() {
-      this.isPurchasing = true
-      this.purchaseStatus = ''
-      this.purchaseMessage = ''
+      this.isPurchasing = true;
+      this.purchaseStatus = '';
+      this.purchaseMessage = '';
 
       try {
-
         // Obtém o uplineAddress do localStorage
-        const storedUpline = localStorage.getItem('uplineAddress')
-        const upline = storedUpline || null
+        const storedUpline = localStorage.getItem('uplineAddress');
+        const upline = storedUpline || null;
 
-        if(!upline) {
-          throw new Error('Upline inválido!')
+        // Obtém o endereço do usuário conectado
+        const userAddress = await this.provider.getSigner().getAddress();
+
+        // Verifica se o upline é igual ao endereço do usuário
+        if (!upline || upline.toLowerCase() === userAddress.toLowerCase()) {
+          throw new Error(this.$t('O endereço do upline não pode ser o mesmo que o seu.'));
         }
 
         // Validações básicas
         if (this.selectedLevel < 1 || this.selectedLevel > 50) {
-          throw new Error('O nível do emblema deve estar entre 1 e 50.')
+          throw new Error(this.$t('O nível do emblema deve estar entre 1 e 50.'));
         }
 
-        const cost = ethers.utils.parseUnits(this.emblemCostInUSDT.toString(), 18)
+        const cost = ethers.utils.parseUnits(this.emblemCostInUSDT.toString(), 18);
 
         // Instancia o contrato USDT usando a ABI IERC20
-        const usdtAddress = await this.contract.usdtToken()
-        const usdtContract = new ethers.Contract(usdtAddress, IERC20ABI, this.provider.getSigner())
+        const usdtAddress = await this.contract.usdtToken();
+        const usdtContract = new ethers.Contract(usdtAddress, IERC20ABI, this.provider.getSigner());
 
         // Verifica o saldo de USDT do usuário
-        const userAddress = await this.provider.getSigner().getAddress()
-        const usdtBalance = await usdtContract.balanceOf(userAddress)
+        const usdtBalance = await usdtContract.balanceOf(userAddress);
 
         if (usdtBalance.lt(cost)) {
-          throw new Error('Saldo insuficiente de USDT.')
+          throw new Error(this.$t('Saldo insuficiente de USDT.'));
         }
 
         // Verifica se a aprovação é necessária
-        const allowance = await usdtContract.allowance(userAddress, this.contractAddress)
+        const allowance = await usdtContract.allowance(userAddress, this.contractAddress);
         if (allowance.lt(cost)) {
           // Solicita aprovação
-          const approveTx = await usdtContract.approve(this.contractAddress, ethers.constants.MaxUint256)
-          await approveTx.wait()
+          const approveTx = await usdtContract.approve(this.contractAddress, ethers.constants.MaxUint256);
+          await approveTx.wait();
         }
 
         // Realiza a compra do emblema
-        const purchaseTx = await this.contract.purchaseEmblem(this.selectedLevel, upline)
+        const purchaseTx = await this.contract.purchaseEmblem(this.selectedLevel, upline);
 
         // Aguarda a confirmação da transação
-        await purchaseTx.wait()
+        await purchaseTx.wait();
 
         // Atualiza as estatísticas após a compra
         await this.refreshAllSections();
 
         // Reseta os campos
-        this.selectedLevel = 1
-        // Não é mais necessário resetar o uplineAddress
-        this.showDetails = false
+        this.selectedLevel = 1;
+        this.showDetails = false;
 
         // Exibe mensagem de sucesso
-        this.purchaseStatus = 'success'
-        this.purchaseMessage = 'Emblema comprado com sucesso!'
-        this.$toast.success(this.purchaseMessage) // Notificação de sucesso
+        this.purchaseStatus = 'success';
+        this.purchaseMessage = this.$t('Emblema comprado com sucesso!');
+        this.$toast.success(this.purchaseMessage); // Notificação de sucesso
       } catch (error) {
         if (error.code === 'ACTION_REJECTED') {
-          this.purchaseStatus = 'error'
-          this.purchaseMessage = 'Transação cancelada pelo usuário.'
-          this.$toast.error(this.purchaseMessage)
+          this.purchaseStatus = 'error';
+          this.purchaseMessage = this.$t('Transação cancelada pelo usuário.');
+          this.$toast.error(this.purchaseMessage);
         } else {
-          // console.error('Erro ao comprar emblema:', error)
-          this.purchaseStatus = 'error'
-          this.purchaseMessage = 'Ocorreu um erro ao comprar o emblema.'
-          this.$toast.error(this.purchaseMessage)
+          this.purchaseStatus = 'error';
+          this.purchaseMessage = error.message || this.$t('Ocorreu um erro ao comprar o emblema.');
+          this.$toast.error(this.purchaseMessage);
         }
       } finally {
-        this.isPurchasing = false
+        this.isPurchasing = false;
       }
     },
     timeRemaining(user) {
@@ -1263,11 +1284,11 @@ export default {
         const tx = await this.contract.requestAid(emblemId)
         await tx.wait()
 
-        this.$toast.success('Pedido de ajuda realizado com sucesso.')
+        this.$toast.success(this.$t('Pedido de recompensa realizado com sucesso.'))
         await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao pedir ajuda:', error)
-        this.$toast.error('Falha ao solicitar ajuda.')
+        this.$toast.error(this.$t('Falha ao solicitar ajuda.'))
       } finally {
         this.isProcessing = false
       }
@@ -1288,11 +1309,11 @@ export default {
         const tx = await this.contract.renewEmblem(emblemId)
         await tx.wait()
 
-        this.$toast.success('Emblema renovado com sucesso.')
+        this.$toast.success(this.$t('Emblema renovado com sucesso.'))
         await this.refreshAllSections()
       } catch (error) {
         // console.error('Erro ao renovar emblema:', error)
-        this.$toast.error('Falha ao renovar o emblema.')
+        this.$toast.error(this.$t('Falha ao renovar o emblema.'))
       } finally {
         this.isProcessing = false
       }
@@ -1431,7 +1452,7 @@ export default {
         // Ordena os dados pelo nível (caso necessário)
         this.fullReferralTree.sort((a, b) => a.level - b.level);
       } catch (error) {
-        this.$toast.error("Falha ao carregar a rede completa de indicações.");
+        this.$toast.error(this.$t("Falha ao carregar a rede completa de indicações."));
       }
     },
     openFullReferralTreeModal() {

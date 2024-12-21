@@ -187,5 +187,21 @@
     "Liquidez do INVT (USDT)": "Liquidez de INVT (USDT)",
     "Ativo": "Activo",
     "Expirado": "Expirado",
-    "Endereço do Upline": "Dirección de Upline"
+    "Endereço do Upline": "Dirección de Upline",
+    "Todos os direitos reservados.": "Todos los derechos reservados.",
+    "Upgrade (USDT)": "Actualización (USDT)",
+    "Jackpot (USDT)": "Premio mayor (USDT)",
+    "Upline:": "Upline:",
+    "O endereço do upline é o mesmo que o seu. Por favor, revise.": "La dirección del upline es la misma que la suya. Por favor, revise.",
+    "O endereço do upline não pode ser o mesmo que o seu.": "La dirección del upline no puede ser la misma que la suya.",
+    "O nível do emblema deve ser um número inteiro entre 1 e 50.": "El nivel del emblema debe ser un número entero entre 1 y 50.",
+    "Link de convite copiado com sucesso!": "¡Enlace de invitación copiado con éxito!",
+    "Falha ao copiar o link.": "Error al copiar el enlace.",
+    "Conta da MetaMask alterada.": "Cuenta de MetaMask cambiada.",
+    "Por favor, instale uma carteira Web3 como o MetaMask.": "Por favor, instale una billetera Web3 como MetaMask.",
+    "Pedido de recompensa realizado com sucesso.": "Solicitud de recompensa realizada con éxito.",
+    "Falha ao solicitar ajuda.": "Error al solicitar ayuda.",
+    "Emblema renovado com sucesso.": "Emblema renovado con éxito.",
+    "Falha ao renovar o emblema.": "Error al renovar el emblema.",
+    "Falha ao carregar a rede completa de indicações.": "Error al cargar la red completa de referidos."
 }
