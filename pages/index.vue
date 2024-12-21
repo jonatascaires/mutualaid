@@ -379,20 +379,30 @@
     <section id="invite-link" class="w-full my-24">
       <BaseSection>
         <div class="col-span-12 px-4">
-          <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
+          <h2 class="text-3xl sm:text-4xl font-semibold sm:pr-8 xl:pr-12 text-center sm:text-left">
             {{ $t('Compartilhe seu') }} <span class="text-header-gradient">{{ $t('Link de Convite') }}</span>
           </h2>
-          <p class="paragraph">
+          <p class="paragraph text-sm sm:text-base text-center sm:text-left mt-4">
             {{ $t('Convide amigos para se juntarem ao nosso sistema de renda passiva utilizando seu link personalizado. Ganhe bônus ao trazer novos membros!') }}
           </p>
-          <div v-if="userAddress" class="flex items-center space-x-4">
-            <input type="text" :value="inviteLink" readonly
-              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-            <BaseButton class="px-4 py-2 bg-blue-500 text-white rounded-lg" @click="copyInviteLink">
+
+          <div v-if="userAddress" class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+            <input
+              type="text"
+              :value="inviteLink"
+              readonly
+              class="w-full sm:flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-center sm:text-left"
+            />
+            <BaseButton
+              class="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg"
+              @click="copyInviteLink"
+            >
               {{ $t('Copiar') }}
             </BaseButton>
           </div>
-          <div v-else class="text-gray-600">{{ $t('Por favor, conecte sua carteira para gerar seu link de convite.') }}
+
+          <div v-else class="text-gray-600 mt-4 text-center">
+            {{ $t('Por favor, conecte sua carteira para gerar seu link de convite.') }}
           </div>
         </div>
       </BaseSection>

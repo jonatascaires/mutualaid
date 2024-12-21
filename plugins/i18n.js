@@ -10,7 +10,10 @@ export default ({ app }) => {
     messages: {
       en: require('~/locales/en.json'),
       es: require('~/locales/es.json'),
-      pt: require('~/locales/pt.json')
+      pt: require('~/locales/pt.json'),
+      zh: require('~/locales/zh.json'),
+      fr: require('~/locales/fr.json'),
+      ru: require('~/locales/ru.json'),
     }
   });
 };
