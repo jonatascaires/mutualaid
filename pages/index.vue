@@ -57,8 +57,7 @@
           <p class="text-gray-500">{{ $t('Volte mais tarde para verificar novas oportunidades de ganho.') }}</p>
         </div>
         <div v-else v-for="(request, index) in queue" :key="index"
-          class="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" data-aos="fade-up"
-          :data-aos-delay="100 * index">
+          class="p-6 bg-white rounded-xl shadow-md hover:shadow-lg">
           <div class="flex items-center space-x-4 mb-4">
             <div class="text-2xl font-bold text-blue-600">#{{ index + 1 }}</div>
             <div class="flex-1">
@@ -1272,9 +1271,7 @@ export default {
       this.purchaseMessage = '';
 
       try {
-        // Obtém o uplineAddress do localStorage
-        const storedUpline = localStorage.getItem('uplineAddress');
-        const upline = storedUpline || null;
+        const upline = this.uplineAddress;
 
         // Obtém o endereço do usuário conectado
         const userAddress = await this.provider.getSigner().getAddress();
