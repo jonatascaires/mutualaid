@@ -1307,6 +1307,8 @@ export default {
           await approveTx.wait();
         }
 
+        console.log('upline', upline)
+
         // Realiza a compra do emblema
         const purchaseTx = await this.contract.purchaseEmblem(this.selectedLevel, upline);
 
