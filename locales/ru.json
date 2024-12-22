@@ -203,5 +203,22 @@
     "Falha ao solicitar ajuda.": "Не удалось запросить помощь.",
     "Emblema renovado com sucesso.": "Значок успешно обновлен.",
     "Falha ao renovar o emblema.": "Не удалось обновить значок.",
-    "Falha ao carregar a rede completa de indicações.": "Не удалось загрузить полную сеть приглашений."
+    "Falha ao carregar a rede completa de indicações.": "Не удалось загрузить полную сеть приглашений.",
+    "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.": "InvisTribe использует токен Invistech для обеспечения устойчивой и надежной экосистемы. Контракт токена является отказным и включает комиссии за покупку/продажу, которые помогают поддерживать проект. Кроме того, мы постоянно добавляем ликвидность, обеспечивая большую безопасность для инвесторов, в то время как механизм выкупа и сжигания стабильно повышает цену.",
+    "Liquidez adicionada automaticamente para maior estabilidade": "Ликвидность автоматически добавляется для большей стабильности",
+    "Mecanismo de buyback e queima garantindo alta constante": "Механизм выкупа и сжигания обеспечивает постоянный рост",
+    "Contrato renunciado e taxas de compra/venda para sustentar o projeto": "Отказной контракт и комиссии за покупку/продажу для поддержки проекта",
+    "Seu Saldo de INVT": "Ваш баланс INVT",
+    "Saldo (INVT):": "Баланс (INVT):",
+    "Preço (USDT):": "Цена (USDT):",
+    "Valor Total (USDT):": "Общая стоимость (USDT):",
+    "Carregando saldo...": "Загрузка баланса...",
+    "Receber Airdrop": "Получить Airdrop",
+    "Receber INVT Grátis": "Получить бесплатные INVT",
+    "Pools de Liquidez (USDT)": "Пулы ликвидности (USDT)",
+    "Suporte e Treinamento (USDT)": "Поддержка и обучение (USDT)",
+    "Não foi possível coletar INVT grátis. Volte mais tarde.": "Не удалось получить бесплатные INVT. Пожалуйста, попробуйте позже.",
+    "INVT grátis recebido com sucesso!": "Бесплатные INVT успешно получены!",
+    "Falha ao executar ação de INVT grátis.": "Не удалось выполнить действие с бесплатными INVT.",
+    "Erro ao receber INVT grátis:": "Ошибка при получении бесплатных INVT:"
 }

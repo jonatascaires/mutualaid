@@ -156,17 +156,17 @@
 
               <!-- Custo e frequência do compromisso -->
               <p class="text-gray-600">
-                <span class="font-semibold text-blue-600">{{ $t('Tarefas Requeridas:') }}</span> {{ commitmentCost }} {{ $t('USDT a cada') }} {{ commitmentPeriodDays }} {{ $t('dias') }}
+                <span class="font-semibold text-blue-600">{{ $t('Compromisso:') }}</span> {{ commitmentCost }} {{ $t('USDT a cada') }} {{ commitmentPeriodDays }} {{ $t('dias') }}
+              </p>
+
+              <!-- Recompensa estimada -->
+              <p class="text-gray-600 mt-2">
+                <span class="font-semibold text-green-600">{{ $t('Recompensa:') }}</span> {{ estimatedReward }} {{ $t('USDT disponível a cada') }} {{ aidRequestPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Custo e frequência da renovação -->
               <p class="text-gray-600 mt-2">
                 <span class="font-semibold text-purple-600">{{ $t('Renovação do Emblema:') }}</span> {{ renewalCost }} {{ $t('USDT a cada') }} {{ renewalPeriodDays }} {{ $t('dias') }}
-              </p>
-
-              <!-- Recompensa estimada -->
-              <p class="text-gray-600 mt-2">
-                <span class="font-semibold text-green-600">{{ $t('Renda Estimada:') }}</span> {{ estimatedReward }} {{ $t('USDT disponível a cada') }} {{ aidRequestPeriodDays }} {{ $t('dias') }}
               </p>
 
               <!-- Mostrar o Upline -->
@@ -270,39 +270,91 @@
     <!-- Parceria com o Token Invistech -->
     <section id="token-partnership" class="w-full my-24">
       <BaseSection>
-        <div data-aos="fade-right" class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 space-y-6 px-4">
+        <!-- Primeira Coluna: Informações do Token -->
+        <div 
+          data-aos="fade-right"
+          class="col-span-12 lg:col-span-6 mt-4 xl:mt-20 px-4 flex flex-col space-y-6 justify-center"
+        >
           <h2 class="text-4xl font-semibold sm:pr-8 xl:pr-12">
-            {{ $t('Parceria Estratégica com o') }} <span class="text-header-gradient">{{ $t('Token Invistech') }}</span>
+            {{ $t('Parceria Estratégica com o') }}
+            <span class="text-header-gradient">{{ $t('Token Invistech') }}</span>
           </h2>
+
           <p class="paragraph">
-            {{ $t('Estabelecemos uma parceria estratégica com o projeto Invistech, um token de alta liquidez, para garantir a sustentabilidade e eficiência do nosso sistema de renda passiva.') }}
+            {{ $t(`O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.`) }}
           </p>
-          <ul class="space-y-4 sm:space-y-2">
-            <LandingListItem :title="$t('Receba seus ganhos em Tokens Invistech em até 24 horas')" />
-            <LandingListItem :title="$t('Sistema Eficiente e Otimizado para Máximos Resultados')" />
-            <LandingListItem :title="$t('Conversão Fácil para USDT ou Outras Criptomoedas')" />
+
+          <ul class="space-y-3 sm:space-y-2">
+            <LandingListItem :title="$t('Liquidez adicionada automaticamente para maior estabilidade')" />
+            <LandingListItem :title="$t('Mecanismo de buyback e queima garantindo alta constante')" />
+            <LandingListItem :title="$t('Contrato renunciado e taxas de compra/venda para sustentar o projeto')" />
           </ul>
-          <!-- Botões adicionados -->
-          <div class="flex space-x-4 mt-6">
-            <BaseButton class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-              @click="navigateToBuyInvistech">
+        </div>
+
+        <!-- Segunda Coluna: Saldo do usuário + botões + imagem menor -->
+        <div
+          data-aos="fade-left"
+          class="col-span-12 lg:col-span-6 mt-4 lg:mt-20 px-4 flex flex-col space-y-6 justify-center"
+        >
+          <!-- Bloco de saldo + imagem menor -->
+          <div class="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center md:items-start space-x-4">
+            <!-- Informações de saldo -->
+            <div v-if="balanceLoading" class="flex items-center space-x-2 text-gray-600">
+              <div class="spinner"></div>
+              <span>{{ $t('Carregando saldo...') }}</span>
+            </div>
+            <div v-else class="flex-1">
+              <h3 class="text-xl font-semibold mb-2">{{ $t('Seu Saldo de INVT') }}</h3>
+              <p class="text-gray-700 mb-1">
+                <strong>{{ $t('Saldo (INVT):') }}</strong> {{ userInvistechBalance }}
+              </p>
+              <p class="text-gray-700 mb-1">
+                <strong>{{ $t('Preço (USDT):') }}</strong> {{ currentInvtPriceInUSD }}
+              </p>
+              <p class="text-gray-700">
+                <strong>{{ $t('Valor Total (USDT):') }}</strong> {{ userInvtBalanceInUSD }}
+              </p>
+            </div>
+
+            <!-- Imagem menor ao lado -->
+            <div class="w-60 h-auto flex-shrink-0 mt-4 md:mt-0">
+              <img
+                :src="require('~/assets/img/img-sections/token_invistech.png')"
+                class="object-contain w-full"
+                :alt="$t('Token Invistech')"
+              />
+            </div>
+          </div>
+
+          <!-- Botões de ação (Comprar, Gráfico, Airdrop) -->
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <BaseButton
+              class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
+              @click="navigateToBuyInvistech"
+            >
               {{ $t('Comprar Tokens Invistech') }}
             </BaseButton>
-            <BaseButton class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
-              @click="viewPriceChart">
+
+            <BaseButton
+              class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
+              @click="viewPriceChart"
+            >
               {{ $t('Ver Gráfico de Preço') }}
             </BaseButton>
-          </div>
-        </div>
-        <div data-aos="fade-left" class="col-span-12 lg:col-span-6">
-          <div class="w-full">
-            <img :src="require('~/assets/img/img-sections/token_invistech.png')" class="w-full"
-              :alt="$t('Parceria com o Token Invistech')" />
+
+            <!-- <BaseButton
+              class="px-6 py-3 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition"
+              :disabled="isProcessing"
+              @click="airdropAction"
+            >
+              <span v-if="!isProcessing">{{ $t('Receber INVT Grátis') }}</span>
+              <span v-else>{{ $t('Processando...') }}</span>
+            </BaseButton> -->
           </div>
         </div>
       </BaseSection>
     </section>
-
+    
     <!-- Nova Seção: Bônus de Indicação -->
     <section id="referral-bonus" class="w-full my-24">
       <BaseSection>
@@ -612,6 +664,12 @@ import IERC20ABI from '../contracts/IERC20.json' // ABI do IERC20 para interagir
 import ContractModal from "@/components/ContractModal.vue";
 import aosMixin from '@/mixins/aos'
 
+// IMPORTA a ABI (caso esteja em outro arquivo) 
+import ADD_LIQUIDITY_INVT_ABI from '../contracts/add_liquidiy_invt.json'
+
+// Se for outro endereço, coloque aqui o address do seu AddLiquidityINVT
+const ADD_LIQUIDITY_INVT_ADDRESS = '0xE56cd20F9F3e1547c7aFB4DD6F5Beedea13512e8'
+
 export default {
   name: 'IndexPage',
   components: {
@@ -638,6 +696,10 @@ export default {
       showModalCalculator: false,
       showAffiliatesModal: false, // Controla a exibição do modal
       affiliates: [], // Lista de afiliados
+      userInvistechBalance: '0.00',
+      currentInvtPriceInUSD: '0.00',
+      userInvtBalanceInUSD: '0.00',
+      balanceLoading: true,
 
       accordions: [
         {
@@ -766,6 +828,51 @@ export default {
     }
   },
   methods: {
+    async airdropAction() {
+      try {
+        this.isProcessing = true;
+
+        // Pega o saldo em USDT do contrato ADD_LIQUIDITY_INVT_ADDRESS
+        const usdtContract = new ethers.Contract(
+          await this.contract.usdtToken(),
+          IERC20ABI,
+          this.provider
+        );
+        const usdtBalance = await usdtContract.balanceOf(ADD_LIQUIDITY_INVT_ADDRESS);
+
+        // Verifica se o saldo é suficiente
+        const minimumBalance = ethers.utils.parseUnits("100", 18);
+        if (usdtBalance.lt(minimumBalance)) {
+          this.$toast.error(this.$t('Não foi possível coletar INVT grátis. Volte mais tarde.'));
+          return;
+        }
+
+        // Passo 1: Conecte a carteira
+        const signer = this.provider.getSigner();
+
+        // Passo 2: Instancia o contrato AddLiquidityINVT
+        const addLiquidityContract = new ethers.Contract(
+          ADD_LIQUIDITY_INVT_ADDRESS,
+          ADD_LIQUIDITY_INVT_ABI,
+          signer
+        );
+
+        // Passo 3: Chama a função addLiquidity()
+        const tx = await addLiquidityContract.addLiquidity();
+
+        // Passo 4: Aguarda confirmação
+        await tx.wait();
+
+        // Exemplo de feedback
+        this.$toast.success(this.$t('INVT grátis recebido com sucesso!'));
+        await this.loadInvistechData();
+      } catch (error) {
+        this.$toast.error(this.$t('Falha ao executar ação de INVT grátis.'));
+        console.error(this.$t('Erro ao receber INVT grátis:'), error);
+      } finally {
+        this.isProcessing = false;
+      }
+    },
     async ensureUsdtApproval(requiredAmount) {
       if (!this.provider || !this.contract) return
 
@@ -1057,12 +1164,15 @@ export default {
             await this.fetchUserEmblems()
           }
 
+          await this.loadInvistechData();
+
           // Escuta mudanças de conta na MetaMask
           window.ethereum.on('accountsChanged', async (accounts) => {
             if (accounts.length > 0) {
               this.userAddress = accounts[0];
               this.inviteLink = `https://invistribe.com/invite/${this.userAddress}`;
               await this.fetchUserEmblems(); // Atualiza os emblemas para o novo endereço
+              await this.loadInvistechData();
               this.$toast.info(this.$t('Conta da MetaMask alterada.'));
             }
           });
@@ -1105,10 +1215,10 @@ export default {
         const valorLiquidezAjustado = totalLiquiditySent - (0.7 * totalBonusesPaid);
 
         // Cálculos das porcentagens baseadas em enviadoParaGestaoAjustado:
-        const upgrade = enviadoParaGestaoAjustado * 0.30;         // 30%
-        const bonificacaoGlobal = enviadoParaGestaoAjustado * 0.40; // 40%
-        const jackpot = enviadoParaGestaoAjustado * 0.15;         // 15%
-        const videoYoutube = enviadoParaGestaoAjustado * 0.15;     // 15%
+        const upgrade = enviadoParaGestaoAjustado * 0.40;
+        const liquidityPools = enviadoParaGestaoAjustado * 0.40;
+        const supportAndTraining = enviadoParaGestaoAjustado * 0.10;
+        const videoYoutube = enviadoParaGestaoAjustado * 0.10;
 
         this.stats = [
           { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
@@ -1124,10 +1234,10 @@ export default {
           { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
           { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
 
-          { label: 'Upgrade (USDT)', value: `${upgrade.toFixed(2)}` },                  // 30% de enviadoParaGestaoAjustado
-          { label: 'Bonificação Global (USDT)', value: `${bonificacaoGlobal.toFixed(2)}` }, // 40% de enviadoParaGestaoAjustado
-          { label: 'Jackpot (USDT)', value: `${jackpot.toFixed(2)}` },                  // 15% de enviadoParaGestaoAjustado
-          { label: 'Vídeo Youtube (USDT)', value: `${videoYoutube.toFixed(2)}` },        // 15% de enviadoParaGestaoAjustado
+          { label: 'Upgrade (USDT)', value: `${upgrade.toFixed(2)}` },                  
+          { label: 'Pools de Liquidez (USDT)', value: `${liquidityPools.toFixed(2)}` }, 
+          { label: 'Suporte e Treinamento (USDT)', value: `${supportAndTraining.toFixed(2)}` },                 
+          { label: 'Vídeo Youtube (USDT)', value: `${videoYoutube.toFixed(2)}` },
           { label: 'Liquidez do INVT (USDT)', value: `${valorLiquidezAjustado.toFixed(2)}` },
         ];
 
@@ -1481,6 +1591,39 @@ export default {
       // Converte de Wei (10^18) para USDT, assumindo que bonusReceived veio em wei:
       const formatedValue = parseFloat(ethers.utils.formatUnits(bonus.toString(), 18)).toFixed(2);
       return formatedValue;
+    },
+    async loadInvistechData() {
+      try {
+        // Inicia o loading do saldo
+        this.balanceLoading = true;
+
+        const signer = this.provider.getSigner();
+        const invtContract = new ethers.Contract(
+          '0xAA217F7BAb90100419b99c027adCf5F0A005C192', // Endereço do token INVT
+          IERC20ABI,
+          signer
+        );
+
+        // 1) Busca o saldo do usuário em INVT
+        const balanceRaw = await invtContract.balanceOf(this.userAddress);
+        const balanceDecimal = parseFloat(ethers.utils.formatUnits(balanceRaw, 18));
+        this.userInvistechBalance = balanceDecimal.toFixed(2);
+
+        // 2) Obtém o preço do INVT em USDT (on-chain)
+        const priceRaw = await this.contract.getInvtPriceInUSDT();
+        const priceDecimal = parseFloat(ethers.utils.formatUnits(priceRaw, 18));
+        this.currentInvtPriceInUSD = priceDecimal.toFixed(4);
+
+        // 3) Multiplica saldo * preço => valor total em USDT
+        const totalValue = balanceDecimal * priceDecimal;
+        this.userInvtBalanceInUSD = totalValue.toFixed(2);
+
+      } catch (error) {
+        console.error('Erro ao carregar dados do INVT:', error);
+      } finally {
+        // Finaliza o loading do saldo
+        this.balanceLoading = false;
+      }
     },
   },
 }

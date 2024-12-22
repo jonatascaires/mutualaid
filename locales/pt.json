@@ -203,5 +203,22 @@
     "Falha ao solicitar ajuda.": "Falha ao solicitar ajuda.",
     "Emblema renovado com sucesso.": "Emblema renovado com sucesso.",
     "Falha ao renovar o emblema.": "Falha ao renovar o emblema.",
-    "Falha ao carregar a rede completa de indicações.": "Falha ao carregar a rede completa de indicações."
+    "Falha ao carregar a rede completa de indicações.": "Falha ao carregar a rede completa de indicações.",
+    "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.": "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.",
+    "Liquidez adicionada automaticamente para maior estabilidade": "Liquidez adicionada automaticamente para maior estabilidade",
+    "Mecanismo de buyback e queima garantindo alta constante": "Mecanismo de buyback e queima garantindo alta constante",
+    "Contrato renunciado e taxas de compra/venda para sustentar o projeto": "Contrato renunciado e taxas de compra/venda para sustentar o projeto",
+    "Seu Saldo de INVT": "Seu Saldo de INVT",
+    "Saldo (INVT):": "Saldo (INVT):",
+    "Preço (USDT):": "Preço (USDT):",
+    "Valor Total (USDT):": "Valor Total (USDT):",
+    "Carregando saldo...": "Carregando saldo...",
+    "Receber Airdrop": "Receber Airdrop",
+    "Receber INVT Grátis": "Receber INVT Grátis",
+    "Pools de Liquidez (USDT)": "Pools de Liquidez (USDT)",
+    "Suporte e Treinamento (USDT)": "Suporte e Treinamento (USDT)",
+    "Não foi possível coletar INVT grátis. Volte mais tarde.": "Não foi possível coletar INVT grátis. Volte mais tarde.",
+    "INVT grátis recebido com sucesso!": "INVT grátis recebido com sucesso!",
+    "Falha ao executar ação de INVT grátis.": "Falha ao executar ação de INVT grátis.",
+    "Erro ao receber INVT grátis:": "Erro ao receber INVT grátis:"
 }

@@ -203,5 +203,22 @@
     "Falha ao solicitar ajuda.": "Failed to request help.",
     "Emblema renovado com sucesso.": "Emblem successfully renewed.",
     "Falha ao renovar o emblema.": "Failed to renew the emblem.",
-    "Falha ao carregar a rede completa de indicações.": "Failed to load the full referral network."
+    "Falha ao carregar a rede completa de indicações.": "Failed to load the full referral network.",
+    "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.": "InvisTribe leverages the Invistech Token to ensure a robust and sustainable ecosystem. The token contract is renounced and has buy/sell fees that help sustain the project. Additionally, we continuously add liquidity, ensuring greater security for investors, while the buyback and burn mechanism steadily increases the price.",
+    "Liquidez adicionada automaticamente para maior estabilidade": "Liquidity automatically added for greater stability",
+    "Mecanismo de buyback e queima garantindo alta constante": "Buyback and burn mechanism ensuring constant growth",
+    "Contrato renunciado e taxas de compra/venda para sustentar o projeto": "Renounced contract and buy/sell fees to sustain the project",
+    "Seu Saldo de INVT": "Your INVT Balance",
+    "Saldo (INVT):": "Balance (INVT):",
+    "Preço (USDT):": "Price (USDT):",
+    "Valor Total (USDT):": "Total Value (USDT):",
+    "Carregando saldo...": "Loading balance...",
+    "Receber Airdrop": "Claim Airdrop",
+    "Receber INVT Grátis": "Claim Free INVT",
+    "Pools de Liquidez (USDT)": "Liquidity Pools (USDT)",
+    "Suporte e Treinamento (USDT)": "Support and Training (USDT)",
+    "Não foi possível coletar INVT grátis. Volte mais tarde.": "Unable to claim free INVT. Please try again later.",
+    "INVT grátis recebido com sucesso!": "Free INVT successfully received!",
+    "Falha ao executar ação de INVT grátis.": "Failed to execute free INVT action.",
+    "Erro ao receber INVT grátis:": "Error receiving free INVT:"
 }

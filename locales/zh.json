@@ -203,5 +203,22 @@
     "Falha ao solicitar ajuda.": "请求帮助失败。",
     "Emblema renovado com sucesso.": "徽章已成功续期。",
     "Falha ao renovar o emblema.": "续期徽章失败。",
-    "Falha ao carregar a rede completa de indicações.": "加载完整推荐网络失败。"
+    "Falha ao carregar a rede completa de indicações.": "加载完整推荐网络失败。",
+    "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.": "InvisTribe 利用 Invistech 代币确保一个稳健且可持续的生态系统。代币合约已放弃并设有买卖手续费来支持项目。此外，我们持续增加流动性，为投资者提供更高的安全性，同时回购和销毁机制稳定提高代币价格。",
+    "Liquidez adicionada automaticamente para maior estabilidade": "自动添加流动性以确保更高的稳定性",
+    "Mecanismo de buyback e queima garantindo alta constante": "回购和销毁机制确保持续增长",
+    "Contrato renunciado e taxas de compra/venda para sustentar o projeto": "放弃合约以及买卖手续费以支持项目",
+    "Seu Saldo de INVT": "您的 INVT 余额",
+    "Saldo (INVT):": "余额 (INVT):",
+    "Preço (USDT):": "价格 (USDT):",
+    "Valor Total (USDT):": "总价值 (USDT):",
+    "Carregando saldo...": "正在加载余额...",
+    "Receber Airdrop": "领取空投",
+    "Receber INVT Grátis": "领取免费 INVT",
+    "Pools de Liquidez (USDT)": "流动性池 (USDT)",
+    "Suporte e Treinamento (USDT)": "支持与培训 (USDT)",
+    "Não foi possível coletar INVT grátis. Volte mais tarde.": "无法领取免费 INVT。请稍后再试。",
+    "INVT grátis recebido com sucesso!": "免费 INVT 领取成功！",
+    "Falha ao executar ação de INVT grátis.": "执行免费 INVT 操作失败。",
+    "Erro ao receber INVT grátis:": "领取免费 INVT 时出错："
 }

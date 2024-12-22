@@ -203,5 +203,22 @@
     "Falha ao solicitar ajuda.": "Échec de la demande d'aide.",
     "Emblema renovado com sucesso.": "Emblème renouvelé avec succès.",
     "Falha ao renovar o emblema.": "Échec du renouvellement de l'emblème.",
-    "Falha ao carregar a rede completa de indicações.": "Échec du chargement du réseau complet de parrainages."
+    "Falha ao carregar a rede completa de indicações.": "Échec du chargement du réseau complet de parrainages.",
+    "O InvisTribe utiliza o Token Invistech para garantir um ecossistema robusto e sustentável. O contrato do token é renunciado e possui taxas de compra/venda que ajudam a sustentar o projeto. Além disso, adicionamos liquidez continuamente, garantindo maior segurança para investidores, enquanto o mecanismo de queima (buyback & burn) eleva o preço de forma constante.": "InvisTribe utilise le Token Invistech pour garantir un écosystème robuste et durable. Le contrat du token est renoncé et des frais d'achat/vente contribuent à soutenir le projet. De plus, nous ajoutons continuellement de la liquidité, garantissant une sécurité accrue pour les investisseurs, tandis que le mécanisme de rachat et de brûlage augmente constamment le prix.",
+    "Liquidez adicionada automaticamente para maior estabilidade": "Liquidité ajoutée automatiquement pour une plus grande stabilité",
+    "Mecanismo de buyback e queima garantindo alta constante": "Mécanisme de rachat et de brûlage garantissant une croissance constante",
+    "Contrato renunciado e taxas de compra/venda para sustentar o projeto": "Contrat renoncé et frais d'achat/vente pour soutenir le projet",
+    "Seu Saldo de INVT": "Votre solde INVT",
+    "Saldo (INVT):": "Solde (INVT) :",
+    "Preço (USDT):": "Prix (USDT) :",
+    "Valor Total (USDT):": "Valeur Totale (USDT) :",
+    "Carregando saldo...": "Chargement du solde...",
+    "Receber Airdrop": "Recevoir un Airdrop",
+    "Receber INVT Grátis": "Recevoir des INVT Gratuits",
+    "Pools de Liquidez (USDT)": "Pools de Liquidité (USDT)",
+    "Suporte e Treinamento (USDT)": "Support et Formation (USDT)",
+    "Não foi possível coletar INVT grátis. Volte mais tarde.": "Impossible de récupérer les INVT gratuits. Veuillez réessayer plus tard.",
+    "INVT grátis recebido com sucesso!": "INVT gratuit reçu avec succès !",
+    "Falha ao executar ação de INVT grátis.": "Échec de l'exécution de l'action INVT gratuite.",
+    "Erro ao receber INVT grátis:": "Erreur lors de la réception des INVT gratuits :"
 }
