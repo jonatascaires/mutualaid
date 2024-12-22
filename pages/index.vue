@@ -376,6 +376,12 @@
             <LandingListItem :title="$t('Construa sua rede e aumente seus ganhos a longo prazo')" />
           </ul>
 
+          <div class="mt-4 px-4">
+            <p><strong>{{ $t('Já Recebido:') }}</strong> {{ userBonus.earnedBonus }} USDT</p>
+            <p><strong>{{ $t('Limite Atual:') }}</strong> {{ userBonus.maxBonus }} USDT</p>
+            <p><strong>{{ $t('Restante:') }}</strong> {{ userBonus.remaining }} USDT</p>
+          </div>
+
           <button class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
             @click="openFullReferralTreeModal">
             {{ $t('Ver Rede Completa de Indicações') }}
@@ -699,6 +705,11 @@ export default {
       currentInvtPriceInUSD: '0.00',
       userInvtBalanceInUSD: '0.00',
       balanceLoading: true,
+      userBonus: {
+        earnedBonus: '0.00',
+        maxBonus: '0.00',
+        remaining: '0.00'
+      },
 
       accordions: [
         {
@@ -805,6 +816,7 @@ export default {
         this.startProgressUpdater();
         this.startQueueUpdater();
         this.fetchQueueData();
+        this.fetchUserBonusInfo();
 
         // Atualiza todas as seções a cada 30 segundos
         this.updateInterval = setInterval(() => {
@@ -827,6 +839,50 @@ export default {
     }
   },
   methods: {
+    async fetchUserBonusInfo() {
+      if (!this.contract || !this.userAddress) return;
+
+      try {
+        // 1) Lê quanto o usuário já recebeu de bônus
+        const userData = await this.contract.users(this.userAddress);
+        const earnedBonusBN = userData.earnedBonus; // BigNumber
+        
+        // 2) Soma o totalLevel dos Emblems ativos
+        const emblems = await this.contract.getUserEmblems(this.userAddress);
+        let totalLevel = 0;
+        for (const emblem of emblems) {
+          // emblem.level é BigNumber. Use toNumber() ou parseInt
+          if (emblem.active) totalLevel += emblem.level.toNumber();
+        }
+
+        // 3) Lê do contrato os valores emblemBaseCost e maxUplineEarningsMultiplier
+        const emblemBaseCostBN = await this.contract.emblemBaseCost(); // BigNumber (ex.: 30 * 1e18)
+        const maxUplineMultBN = await this.contract.maxUplineEarningsMultiplier(); // BigNumber (ex.: 3)
+
+        // 4) Constrói BigNumbers no front-end para calcular o maxBonus
+        const totalLevelBN = ethers.BigNumber.from(totalLevel.toString());
+        // maxBonusBN = totalLevel * emblemBaseCost * maxUplineEarningsMultiplier
+        const maxBonusBN = totalLevelBN
+          .mul(emblemBaseCostBN)
+          .mul(maxUplineMultBN);
+
+        // 5) Converte todos para decimal (float) antes de exibir
+        const earnedBonus = parseFloat(ethers.utils.formatUnits(earnedBonusBN, 18));
+        const maxBonus = parseFloat(ethers.utils.formatUnits(maxBonusBN, 18));
+
+        // 6) Calcula quanto ainda falta para atingir o teto
+        const remaining = Math.max(0, maxBonus - earnedBonus);
+
+        // 7) Salva no data() (ou reactive state) para exibir no template
+        this.userBonus.earnedBonus = earnedBonus.toFixed(2);
+        this.userBonus.maxBonus    = maxBonus.toFixed(2);
+        this.userBonus.remaining  = remaining.toFixed(2);
+
+      } catch (error) {
+        console.error("Erro ao buscar bônus do usuário:", error);
+        // Exiba algum alerta ou toast de erro
+      }
+    },
     async airdropAction() {
       try {
         this.isProcessing = true;
@@ -1165,6 +1221,8 @@ export default {
 
           await this.loadInvistechData();
 
+          await this.fetchUserBonusInfo();
+
           // Escuta mudanças de conta na MetaMask
           window.ethereum.on('accountsChanged', async (accounts) => {
             if (accounts.length > 0) {
@@ -1172,6 +1230,7 @@ export default {
               this.inviteLink = `https://invistribe.com/invite/${this.userAddress}`;
               await this.fetchUserEmblems(); // Atualiza os emblemas para o novo endereço
               await this.loadInvistechData();
+              await this.fetchUserBonusInfo();
               this.$toast.info(this.$t('Conta da MetaMask alterada.'));
             }
           });

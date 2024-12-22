@@ -220,5 +220,7 @@
     "Não foi possível coletar INVT grátis. Volte mais tarde.": "无法领取免费 INVT。请稍后再试。",
     "INVT grátis recebido com sucesso!": "免费 INVT 领取成功！",
     "Falha ao executar ação de INVT grátis.": "执行免费 INVT 操作失败。",
-    "Erro ao receber INVT grátis:": "领取免费 INVT 时出错："
+    "Erro ao receber INVT grátis:": "领取免费 INVT 时出错：",
+    "Já Recebido:": "已领取：",
+    "Limite Atual:": "当前限制："
 }

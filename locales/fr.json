@@ -220,5 +220,7 @@
     "Não foi possível coletar INVT grátis. Volte mais tarde.": "Impossible de récupérer les INVT gratuits. Veuillez réessayer plus tard.",
     "INVT grátis recebido com sucesso!": "INVT gratuit reçu avec succès !",
     "Falha ao executar ação de INVT grátis.": "Échec de l'exécution de l'action INVT gratuite.",
-    "Erro ao receber INVT grátis:": "Erreur lors de la réception des INVT gratuits :"
+    "Erro ao receber INVT grátis:": "Erreur lors de la réception des INVT gratuits :",
+    "Já Recebido:": "Déjà reçu :",
+    "Limite Atual:": "Limite actuel :"
 }

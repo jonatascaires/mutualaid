@@ -220,5 +220,7 @@
     "Não foi possível coletar INVT grátis. Volte mais tarde.": "Unable to claim free INVT. Please try again later.",
     "INVT grátis recebido com sucesso!": "Free INVT successfully received!",
     "Falha ao executar ação de INVT grátis.": "Failed to execute free INVT action.",
-    "Erro ao receber INVT grátis:": "Error receiving free INVT:"
+    "Erro ao receber INVT grátis:": "Error receiving free INVT:",
+    "Já Recebido:": "Already Received:",
+    "Limite Atual:": "Current Limit:"
 }
