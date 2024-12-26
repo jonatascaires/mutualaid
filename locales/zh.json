@@ -222,5 +222,6 @@
     "Falha ao executar ação de INVT grátis.": "执行免费 INVT 操作失败。",
     "Erro ao receber INVT grátis:": "领取免费 INVT 时出错：",
     "Já Recebido:": "已领取：",
-    "Limite Atual:": "当前限制："
+    "Limite Atual:": "当前限制：",
+    "Carregando fila de recompensas...": "加载奖励队列..."
 }

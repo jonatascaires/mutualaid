@@ -222,5 +222,6 @@
     "Falha ao executar ação de INVT grátis.": "Échec de l'exécution de l'action INVT gratuite.",
     "Erro ao receber INVT grátis:": "Erreur lors de la réception des INVT gratuits :",
     "Já Recebido:": "Déjà reçu :",
-    "Limite Atual:": "Limite actuel :"
+    "Limite Atual:": "Limite actuel :",
+    "Carregando fila de recompensas...": "Chargement de la file d'attente des récompenses..."
 }

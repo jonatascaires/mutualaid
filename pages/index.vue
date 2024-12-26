@@ -50,19 +50,22 @@
         <p class="text-gray-600 mt-4 text-lg">{{ $t('Visualize as próximas oportunidades de ganho no sistema.') }}</p>
       </div>
 
-      <!-- Cards com contagem regressiva e detalhes -->
-      <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
+      <div v-if="loadingQueue" class="text-center my-6">
+        <p class="text-gray-600">{{ $t('Carregando fila de recompensas...') }}</p>
+      </div>
+
+      <div v-else class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
         <div v-if="queue.length === 0" class="col-span-1 sm:col-span-2 lg:col-span-3 text-center">
           <p class="text-gray-600 text-lg font-semibold">{{ $t('A fila está vazia no momento.') }} 🚀</p>
           <p class="text-gray-500">{{ $t('Volte mais tarde para verificar novas oportunidades de ganho.') }}</p>
         </div>
-        <div v-else v-for="(request, index) in queue" :key="index"
+        <div v-else v-for="(request, index) in getPaginatedQueue()" :key="index"
           class="p-6 bg-white rounded-xl shadow-md hover:shadow-lg">
+          <!-- Card de Ordem -->
           <div class="flex items-center space-x-4 mb-4">
-            <div class="text-2xl font-bold text-blue-600">#{{ index + 1 }}</div>
+            <div class="text-2xl font-bold text-blue-600">#{{ (currentPage - 1) * itemsPerPage + index + 1 }}</div>
             <div class="flex-1">
-              <h3 class="text-xl font-semibold text-gray-800">{{ $t('Usuário:') }} {{ compactAddress(request.user) }}
-              </h3>
+              <h3 class="text-xl font-semibold text-gray-800">{{ $t('Usuário:') }} {{ compactAddress(request.user) }}</h3>
             </div>
             <div>
               <span class="px-2 py-1 text-sm font-semibold rounded-full" :class="{
@@ -94,35 +97,30 @@
                 {{ $t('Restante:') }} <span class="font-semibold text-red-500">{{ request.remainingAid }} USDT</span>
               </p>
             </div>
-            <!-- <div class="flex items-center">
+            <div class="flex items-center">
               <ClockIcon class="w-5 h-5 text-blue-600 mr-2" />
               <p class="text-gray-700">
                 {{ $t('Tempo Restante:') }} {{ formatTime(request.timeRemaining) }}
               </p>
-            </div> -->
-            <!-- Barra de progresso -->
-            <!-- <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div class="bg-blue-600 h-2.5 rounded-full" :style="{ width: request.progress + '%' }"></div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Paginação no Rodapé -->
+      <!-- Paginação -->
       <div class="w-full flex justify-center mt-12">
         <button
-          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
-          1
+          v-for="page in totalPages()"
+          :key="page"
+          @click="changePage(page)"
+          :class="['px-4 py-2 mx-1 rounded-lg text-base border', {
+            'bg-blue-500 text-white': page === currentPage,
+            'bg-white text-gray-700 hover:bg-blue-50': page !== currentPage
+          }]"
+        >
+          {{ page }}
         </button>
-        <button
-          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
-          2
-        </button>
-        <button
-          class="px-4 py-2 mx-1 rounded-lg bg-white text-gray-700 hover:bg-blue-50 border border-gray-300 text-base">
-          3
-        </button>
-      </div>
+      </div>      
     </section>
 
     <!-- Seção de Compra de Emblema -->
@@ -710,6 +708,9 @@ export default {
         maxBonus: '0.00',
         remaining: '0.00'
       },
+      currentPage: 1,
+      itemsPerPage: 6,
+      loadingQueue: true,
 
       accordions: [
         {
@@ -839,6 +840,17 @@ export default {
     }
   },
   methods: {
+    getPaginatedQueue() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.queue.slice(startIndex, endIndex);
+    },
+    changePage(page) {
+      this.currentPage = page;
+    },
+    totalPages() {
+      return Math.ceil(this.queue.length / this.itemsPerPage);
+    },
     async fetchUserBonusInfo() {
       if (!this.contract || !this.userAddress) return;
 
@@ -1113,9 +1125,12 @@ export default {
       return Math.max((remaining / total) * 100, 0); // Evita valores negativos
     },
     formatTime(seconds) {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const secs = seconds % 60;
+      const adjustedSeconds = Math.max(seconds - 604800, 0);
+
+      const hours = Math.floor(adjustedSeconds / 3600);
+      const minutes = Math.floor((adjustedSeconds % 3600) / 60);
+      const secs = adjustedSeconds % 60;
+
       return `${hours}h ${minutes}m ${secs}s`;
     },
     formatTimeRemaining(emblem, action) {
@@ -1514,6 +1529,9 @@ export default {
     },
 
     async fetchQueueData() {
+
+      this.loadingQueue = true;
+
       if (!this.contract) return;
 
       try {
@@ -1521,7 +1539,7 @@ export default {
         const queueStartIndex = (await this.contract.queueStartIndex()).toNumber();
 
         // Define o número máximo de ordens para buscar (ajuste conforme necessário)
-        const maxQueueSize = 10;
+        const maxQueueSize = 60;
 
         // Busca os dados da fila a partir de `queueStartIndex`
         const queueData = await this.contract.getaidQueue(queueStartIndex, queueStartIndex + maxQueueSize, 2);
@@ -1532,7 +1550,8 @@ export default {
         // Processa os dados da fila
         this.queue = queueData.map((item) => {
           const expirationTime = item.expirationTime.toNumber();
-          const remainingTime = expirationTime - currentTime;
+          const currentTime = Math.floor(Date.now() / 1000);
+          const originalRemainingTime = Math.max(expirationTime - currentTime, 0);
 
           return {
             user: item.user,
@@ -1541,7 +1560,7 @@ export default {
             remainingAid: parseFloat(ethers.utils.formatUnits(item.remainingAid, 18)).toFixed(2),
             receivedAmount: parseFloat(ethers.utils.formatUnits(item.receivedAmount, 18)).toFixed(2),
             expirationTime,
-            timeRemaining: Math.max(remainingTime, 0),
+            timeRemaining: Math.max(originalRemainingTime - 604800, 0),
             status: item.status,
           };
         });
@@ -1566,7 +1585,15 @@ export default {
         if (this.queue.length === 0) {
           this.queue = [];
         }
+
+        setTimeout(() => {
+          this.loadingQueue = false;
+        }, 2000)
+        
       } catch (error) {
+        setTimeout(() => {
+          this.loadingQueue = false;
+        }, 2000)
         // console.error('Erro ao buscar dados da fila:', error);
       }
     },
@@ -1583,9 +1610,9 @@ export default {
     },
 
     // Calcula a porcentagem de tempo restante para a barra de progresso
-    timeRemainingPercentageForQueue(user) {
-      const maxWaitTime = 24 * 3600; // 24 horas em segundos
-      return ((user.timeRemaining || 0) / maxWaitTime) * 100;
+    timeRemainingPercentageForQueue(request) {
+      const maxTime = 24 * 3600; // 24 horas em segundos
+      return Math.min(((request.timeRemaining || 0) / maxTime) * 100, 100); // Limite em 100%
     },
     compactAddress(address) {
       if (!address || address.length !== 42) {
@@ -1766,5 +1793,20 @@ button.fixed:hover {
 .modal-price .w-full {
   width: 100%;
   height: 100%;
+}
+
+.progress-bar {
+  background-color: #d1d5db; /* Cor de fundo da barra */
+  border-radius: 9999px; /* Barra arredondada */
+  height: 0.625rem; /* Altura da barra */
+  width: 100%; /* Largura total */
+  position: relative;
+}
+
+.progress-bar-inner {
+  background-color: #2563eb; /* Cor azul para a barra de progresso */
+  border-radius: 9999px;
+  height: 100%; /* Altura total da barra interna */
+  transition: width 0.3s ease-in-out; /* Animação suave */
 }
 </style>

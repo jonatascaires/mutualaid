@@ -222,5 +222,6 @@
     "Falha ao executar ação de INVT grátis.": "Не удалось выполнить действие с бесплатными INVT.",
     "Erro ao receber INVT grátis:": "Ошибка при получении бесплатных INVT:",
     "Já Recebido:": "Уже получено:",
-    "Limite Atual:": "Текущий лимит:"
+    "Limite Atual:": "Текущий лимит:",
+    "Carregando fila de recompensas...": "Загрузка очереди наград..."
 }

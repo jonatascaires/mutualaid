@@ -222,5 +222,6 @@
     "Falha ao executar ação de INVT grátis.": "Failed to execute free INVT action.",
     "Erro ao receber INVT grátis:": "Error receiving free INVT:",
     "Já Recebido:": "Already Received:",
-    "Limite Atual:": "Current Limit:"
+    "Limite Atual:": "Current Limit:",
+    "Carregando fila de recompensas...": "Loading reward queue..."
 }
