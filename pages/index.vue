@@ -339,14 +339,6 @@
               {{ $t('Ver Gráfico de Preço') }}
             </BaseButton>
 
-            <!-- <BaseButton
-              class="px-6 py-3 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition"
-              :disabled="isProcessing"
-              @click="airdropAction"
-            >
-              <span v-if="!isProcessing">{{ $t('Receber INVT Grátis') }}</span>
-              <span v-else>{{ $t('Processando...') }}</span>
-            </BaseButton> -->
           </div>
         </div>
       </BaseSection>
@@ -523,6 +515,9 @@
     <ContractModal v-if="isContractModalVisible" :isContractModalVisible="isContractModalVisible"
       @close="isContractModalVisible = false" />
 
+    <!-- Componente da barra de redes sociais -->
+    <SocialBar />
+
     <div class="w-full relative">
       <!-- Botão Flutuante -->
       <button
@@ -665,20 +660,16 @@ import CurrencyUsdIcon from 'vue-material-design-icons/CurrencyUsd.vue'
 import contractABI from '../contracts/mutualaid_abi.json' // Certifique-se de que esta ABI corresponde ao seu contrato implantado
 import IERC20ABI from '../contracts/IERC20.json' // ABI do IERC20 para interagir com o USDT
 import ContractModal from "@/components/ContractModal.vue";
+import SocialBar from "@/components/SocialBar.vue";
 import aosMixin from '@/mixins/aos'
-
-// IMPORTA a ABI (caso esteja em outro arquivo) 
-import ADD_LIQUIDITY_INVT_ABI from '../contracts/add_liquidiy_invt.json'
-
-// Se for outro endereço, coloque aqui o address do seu AddLiquidityINVT
-const ADD_LIQUIDITY_INVT_ADDRESS = '0xE56cd20F9F3e1547c7aFB4DD6F5Beedea13512e8'
 
 export default {
   name: 'IndexPage',
   components: {
     CurrencyUsdIcon,
     ClockIcon,
-    ContractModal
+    ContractModal,
+    SocialBar
   },
   mixins: [aosMixin],
   data() {
@@ -819,7 +810,7 @@ export default {
         this.fetchQueueData();
         this.fetchUserBonusInfo();
 
-        // Atualiza todas as seções a cada 30 segundos
+        // Atualiza todas as seções a cada 60 segundos
         this.updateInterval = setInterval(() => {
           this.refreshAllSections();
         }, 60000);
@@ -893,51 +884,6 @@ export default {
       } catch (error) {
         console.error("Erro ao buscar bônus do usuário:", error);
         // Exiba algum alerta ou toast de erro
-      }
-    },
-    async airdropAction() {
-      try {
-        this.isProcessing = true;
-
-        // Pega o saldo em USDT do contrato ADD_LIQUIDITY_INVT_ADDRESS
-        const usdtContract = new ethers.Contract(
-          await this.contract.usdtToken(),
-          IERC20ABI,
-          this.provider
-        );
-        const usdtBalance = await usdtContract.balanceOf(ADD_LIQUIDITY_INVT_ADDRESS);
-
-        // Verifica se o saldo é suficiente
-        const minimumBalance = ethers.utils.parseUnits("100", 18);
-        if (usdtBalance.lt(minimumBalance)) {
-          this.$toast.error(this.$t('Não foi possível coletar INVT grátis. Volte mais tarde.'));
-          return;
-        }
-
-        // Passo 1: Conecte a carteira
-        const signer = this.provider.getSigner();
-
-        // Passo 2: Instancia o contrato AddLiquidityINVT
-        const addLiquidityContract = new ethers.Contract(
-          ADD_LIQUIDITY_INVT_ADDRESS,
-          ADD_LIQUIDITY_INVT_ABI,
-          signer
-        );
-
-        // Passo 3: Chama a função addLiquidity()
-        const tx = await addLiquidityContract.addLiquidity();
-
-        // Passo 4: Aguarda confirmação
-        await tx.wait();
-
-        // Exemplo de feedback
-        this.$toast.success(this.$t('INVT grátis recebido com sucesso!'));
-        await this.loadInvistechData();
-      } catch (error) {
-        this.$toast.error(this.$t('Falha ao executar ação de INVT grátis.'));
-        console.error(this.$t('Erro ao receber INVT grátis:'), error);
-      } finally {
-        this.isProcessing = false;
       }
     },
     async ensureUsdtApproval(requiredAmount) {
@@ -1543,9 +1489,6 @@ export default {
 
         // Busca os dados da fila a partir de `queueStartIndex`
         const queueData = await this.contract.getaidQueue(queueStartIndex, queueStartIndex + maxQueueSize, 2);
-
-        // Define o horário atual em segundos
-        const currentTime = Math.floor(Date.now() / 1000);
 
         // Processa os dados da fila
         this.queue = queueData.map((item) => {
