@@ -1224,42 +1224,104 @@ export default {
       try {
         const data = await this.contract.getStatistics();
 
-        const totalDonated = parseFloat(ethers.utils.formatUnits(data._totalDonated || 0, 18));
-        const totalBonusesPaid = parseFloat(ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18));
-        const totalSentToAdminWallet = parseFloat(ethers.utils.formatUnits(data._totalSentToAdminWallet || 0, 18));
-        const totalLiquiditySent = parseFloat(ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18));
+        // Parse dos valores retornados pelo contrato
+        const totalValueEmblemsPurchased = parseFloat(
+          ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)
+        );
+        const totalValueCommitmentsMade = parseFloat(
+          ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)
+        );
+        const totalDonated = parseFloat(
+          ethers.utils.formatUnits(data._totalDonated || 0, 18)
+        );
+        const totalBonusesPaid = parseFloat(
+          ethers.utils.formatUnits(data._totalBonusesPaid || 0, 18)
+        );
+        const totalSentToAdminWallet = parseFloat(
+          ethers.utils.formatUnits(data._totalSentToAdminWallet || 0, 18)
+        );
+        const totalLiquiditySent = parseFloat(
+          ethers.utils.formatUnits(data._totalLiquiditySent || 0, 18)
+        );
 
-        const totalContribuicoesAjustado = totalDonated - totalBonusesPaid;
-        const enviadoParaGestaoAjustado = totalSentToAdminWallet - (0.3 * totalBonusesPaid);
-        const valorLiquidezAjustado = totalLiquiditySent - (0.7 * totalBonusesPaid);
+        // Novo cálculo de Contribuições Totais (soma de Emblemas + Compromissos)
+        const totalContribuicoes = totalValueEmblemsPurchased + totalValueCommitmentsMade;
 
-        // Cálculos das porcentagens baseadas em enviadoParaGestaoAjustado:
-        const upgrade = enviadoParaGestaoAjustado * 0.40;
-        const liquidityPools = enviadoParaGestaoAjustado * 0.40;
-        const supportAndTraining = enviadoParaGestaoAjustado * 0.10;
-        const videoYoutube = enviadoParaGestaoAjustado * 0.10;
+        // Ajustes para outras métricas conforme sua lógica atual
+        const enviadoParaGestaoAjustado = totalSentToAdminWallet - 0.3 * totalBonusesPaid;
+        const valorLiquidezAjustado = totalLiquiditySent - 0.7 * totalBonusesPaid;
+
+        // Cálculos das porcentagens baseadas em enviadoParaGestaoAjustado
+        const upgrade = enviadoParaGestaoAjustado * 0.4;
+        const liquidityPools = enviadoParaGestaoAjustado * 0.4;
+        const supportAndTraining = enviadoParaGestaoAjustado * 0.2;
+
+        // Soma de Upgrade + Suporte e Treinamento
+        const upgradeTotal = upgrade + supportAndTraining;
 
         this.stats = [
           { label: 'Emblemas Adquiridos', value: data._totalEmblemsPurchased?.toNumber() || 0 },
-          { label: 'Valor Total de Emblemas (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueEmblemsPurchased || 0, 18)).toFixed(2)}` },
-          { label: 'Compromissos Realizados', value: data._totalCommitmentsMade?.toNumber() || 0 },
-          { label: 'Valor Total em Compromissos (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueCommitmentsMade || 0, 18)).toFixed(2)}` },
-          { label: 'Renovações Concluídas', value: data._totalRenewals?.toNumber() || 0 },
-          { label: 'Valor Total em Renovações (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)).toFixed(2)}` },
-          { label: 'Contribuições Totais (USDT)', value: `${totalContribuicoesAjustado.toFixed(2)}` },
-
-          { label: 'Bonificações Pagas (USDT)', value: `${totalBonusesPaid.toFixed(2)}` },
-          { label: 'Valor Total na Fila de Distribuição (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalQueueValue || 0, 18)).toFixed(2)}` },
-          { label: 'Distribuições Realizadas', value: data._totalHelpRequests?.toNumber() || 0 },
-          { label: 'Valor Total em Distribuições (USDT)', value: `${parseFloat(ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)).toFixed(2)}` },
-
-          { label: 'Upgrade (USDT)', value: `${upgrade.toFixed(2)}` },                  
-          { label: 'Pools de Liquidez (USDT)', value: `${liquidityPools.toFixed(2)}` }, 
-          { label: 'Suporte e Treinamento (USDT)', value: `${supportAndTraining.toFixed(2)}` },                 
-          { label: 'Vídeo Youtube (USDT)', value: `${videoYoutube.toFixed(2)}` },
-          { label: 'Liquidez do INVT (USDT)', value: `${valorLiquidezAjustado.toFixed(2)}` },
+          {
+            label: 'Valor Total de Emblemas (USDT)',
+            value: `${totalValueEmblemsPurchased.toFixed(2)}`
+          },
+          {
+            label: 'Compromissos Realizados',
+            value: data._totalCommitmentsMade?.toNumber() || 0
+          },
+          {
+            label: 'Valor Total em Compromissos (USDT)',
+            value: `${totalValueCommitmentsMade.toFixed(2)}`
+          },
+          {
+            label: 'Renovações Concluídas',
+            value: data._totalRenewals?.toNumber() || 0
+          },
+          {
+            label: 'Valor Total em Renovações (USDT)',
+            value: `${parseFloat(
+              ethers.utils.formatUnits(data._totalValueRenewals || 0, 18)
+            ).toFixed(2)}`
+          },
+          {
+            label: 'Contribuições Totais (USDT)',
+            value: `${totalContribuicoes.toFixed(2)}`
+          },
+          {
+            label: 'Bonificações Pagas (USDT)',
+            value: `${totalBonusesPaid.toFixed(2)}`
+          },
+          {
+            label: 'Valor Total na Fila de Distribuição (USDT)',
+            value: `${parseFloat(
+              ethers.utils.formatUnits(data._totalQueueValue || 0, 18)
+            ).toFixed(2)}`
+          },
+          {
+            label: 'Distribuições Realizadas',
+            value: data._totalHelpRequests?.toNumber() || 0
+          },
+          {
+            label: 'Valor Total em Distribuições (USDT)',
+            value: `${parseFloat(
+              ethers.utils.formatUnits(data._totalValueHelpRequests || 0, 18)
+            ).toFixed(2)}`
+          },
+          {
+            // Agora passamos a exibir o "upgrade" já somado com "supportAndTraining"
+            label: 'Upgrade (USDT)',
+            value: `${upgradeTotal.toFixed(2)}`
+          },
+          {
+            label: 'Pools de Liquidez (USDT)',
+            value: `${liquidityPools.toFixed(2)}`
+          },
+          // Removido o item "Suporte e Treinamento (USDT)"
+          {
+            label: 'Liquidez do INVT (USDT)',
+            value: `${valorLiquidezAjustado.toFixed(2)}`
+          }
         ];
-
       } catch (error) {
         // console.error('Erro ao obter estatísticas:', error.message);
       } finally {
